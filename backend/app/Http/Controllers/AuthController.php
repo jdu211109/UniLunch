@@ -36,6 +36,7 @@ class AuthController extends Controller
                     'id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
+                    'role' => $user->role,
                 ],
                 'token' => $token,
                 'token_type' => 'Bearer'
@@ -63,6 +64,7 @@ class AuthController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
+            'role' => 'user', // Default role for new users
         ]);
 
         // Create API token for the new user
@@ -75,6 +77,7 @@ class AuthController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
+                'role' => $user->role ?? 'user', // Fallback to 'user' if null
             ],
             'token' => $token,
             'token_type' => 'Bearer'
