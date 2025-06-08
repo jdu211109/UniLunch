@@ -2,10 +2,11 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LoginController;
+use App\Http\Controllers\AuthController;
 
 // Public routes
-Route::post('/login', [LoginController::class, 'authenticate']);
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'authenticate']);
 
 // Protected routes (require API token)
 Route::middleware('auth:sanctum')->group(function () {
@@ -13,6 +14,6 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
     
-    Route::post('/logout', [LoginController::class, 'logout']);
-    Route::post('/logout-all', [LoginController::class, 'logoutAll']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/logout-all', [AuthController::class, 'logoutAll']);
 });
