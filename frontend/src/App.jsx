@@ -1,20 +1,22 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+// src/App.jsx
+import React, { useState } from "react";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import AppRoutes from './routes/AppRoutes';
+import { AuthProvider } from './context/AuthContext.jsx';
+import './index.css';
 
-function App() {
+const queryClient = new QueryClient();
+
+export default function App() {
+  const [searchQuery, setSearchQuery] = useState("");
+  
   return (
-    <Router>
-      <div className="min-h-screen bg-gray-100">
-        <Routes>
-          <Route path="/" element={
-            <div className="container mx-auto px-4 py-8">
-              <h1 className="text-4xl font-bold text-gray-900">Welcome to UniLunch</h1>
-              <p className="mt-4 text-gray-600">Your new React + Tailwind CSS project is ready!</p>
-            </div>
-          } />
-        </Routes>
-      </div>
-    </Router>
-  )
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <div className="min-h-screen bg-background">
+          <AppRoutes searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        </div>
+      </AuthProvider>
+    </QueryClientProvider>
+  );
 }
-
-export default App
