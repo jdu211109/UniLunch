@@ -1,13 +1,22 @@
-import React from 'react';
-import Header from './components/Header';
+// src/App.jsx
+import React, { useState } from "react";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import AppRoutes from './routes/AppRoutes';
+import { AuthProvider } from './context/AuthContext.jsx';
+import './index.css';
 
-function App() {
+const queryClient = new QueryClient();
+
+export default function App() {
+  const [searchQuery, setSearchQuery] = useState("");
+  
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      {/* Остальное содержимое вашего приложения */}
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <div className="min-h-screen bg-background">
+          <AppRoutes searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        </div>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }
-
-export default App;
