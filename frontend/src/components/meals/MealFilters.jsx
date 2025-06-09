@@ -1,7 +1,7 @@
 // src/components/meals/MealFilters.jsx
 import React from "react";
-import { Leaf, Flame } from "lucide-react";
-import { Button, Checkbox, Label, Badge } from "../ui";
+import { Leaf, Flame, X } from "lucide-react";
+import { Button, Checkbox, Label, Badge, Input } from "../ui";
 
 export default function MealFilters({
   filters,
@@ -67,7 +67,32 @@ export default function MealFilters({
                   Vegetarian
                 </Label>
               </div>
-              {/* ... other dietary preference filters */}
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="spicy"
+                  checked={filters.spicy}
+                  onCheckedChange={(checked) =>
+                    setFilters({ ...filters, spicy: checked === true })
+                  }
+                />
+                <Label htmlFor="spicy" className="flex items-center gap-1">
+                  <Flame size={16} className="text-red-500" />
+                  Spicy
+                </Label>
+              </div>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="favoritesOnly"
+                  checked={filters.favoritesOnly}
+                  onCheckedChange={(checked) =>
+                    setFilters({ ...filters, favoritesOnly: checked === true })
+                  }
+                />
+                <Label htmlFor="favoritesOnly" className="flex items-center gap-1">
+                  <Star size={16} className="text-yellow-500" />
+                  Favorites Only
+                </Label>
+              </div>
             </div>
 
             {/* Food type filters */}
@@ -88,7 +113,16 @@ export default function MealFilters({
                   <option value="liquid">Liquid Food (Soups, Curries)</option>
                 </select>
               </div>
-              {/* ... other food type filters */}
+              <div className="space-y-2">
+                <Label htmlFor="includesDrinks">Includes Drinks</Label>
+                <Checkbox
+                  id="includesDrinks"
+                  checked={filters.includesDrinks}
+                  onCheckedChange={(checked) =>
+                    setFilters({ ...filters, includesDrinks: checked === true })
+                  }
+                />
+              </div>
             </div>
 
             {/* Price and sort filters */}
@@ -110,7 +144,22 @@ export default function MealFilters({
                   <option value="premium">Premium ($15+)</option>
                 </select>
               </div>
-              {/* ... other sorting filters */}
+              <div className="space-y-2">
+                <Label htmlFor="sortBy">Sort By</Label>
+                <select
+                  id="sortBy"
+                  value={filters.sortBy}
+                  onChange={(e) =>
+                    setFilters({ ...filters, sortBy: e.target.value })
+                  }
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                >
+                  <option value="default">Default</option>
+                  <option value="priceAsc">Price: Low to High</option>
+                  <option value="priceDesc">Price: High to Low</option>
+                  <option value="rating">Highest Rated</option>
+                </select>
+              </div>
             </div>
           </div>
 
@@ -153,7 +202,73 @@ export default function MealFilters({
             </Button>
           </Badge>
         )}
-        {/* ... other active filter badges */}
+        {filters.spicy && (
+          <Badge variant="secondary" className="flex items-center gap-1">
+            <Flame size={14} className="text-red-500" />
+            Spicy
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-4 w-4 ml-1 p-0"
+              onClick={() => setFilters({ ...filters, spicy: false })}
+            >
+              <X size={12} />
+            </Button>
+          </Badge>
+        )}
+        {filters.favoritesOnly && (
+          <Badge variant="secondary" className="flex items-center gap-1">
+            <Star size={14} className="text-yellow-500" />
+            Favorites Only
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-4 w-4 ml-1 p-0"
+              onClick={() => setFilters({ ...filters, favoritesOnly: false })}
+            >
+              <X size={12} />
+            </Button>
+          </Badge>
+        )}
+        {filters.foodType !== "all" && (
+          <Badge variant="secondary" className="flex items-center gap-1">
+            Food Type: {filters.foodType}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-4 w-4 ml-1 p-0"
+              onClick={() => setFilters({ ...filters, foodType: "all" })}
+            >
+              <X size={12} />
+            </Button>
+          </Badge>
+        )}
+        {filters.priceRange !== "all" && (
+          <Badge variant="secondary" className="flex items-center gap-1">
+            Price Range: {filters.priceRange}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-4 w-4 ml-1 p-0"
+              onClick={() => setFilters({ ...filters, priceRange: "all" })}
+            >
+              <X size={12} />
+            </Button>
+          </Badge>
+        )}
+        {filters.sortBy !== "default" && (
+          <Badge variant="secondary" className="flex items-center gap-1">
+            Sort By: {filters.sortBy}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-4 w-4 ml-1 p-0"
+              onClick={() => setFilters({ ...filters, sortBy: "default" })}
+            >
+              <X size={12} />
+            </Button>
+          </Badge>
+        )}
       </div>
     </>
   );
