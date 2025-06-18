@@ -1,61 +1,262 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## Project Overview
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+UniLunch Backend - A Laravel 12 API backend for a university lunch management system with authentication and role-based access control.
 
-## About Laravel
+## Essential Development Commands
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Initial Setup
+```bash
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+touch database/database.sqlite
+php artisan migrate
+```
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Development
+```bash
+composer dev              # Runs all services concurrently (recommended)
+php artisan serve        # Laravel server only (http://localhost:8000)
+npm run dev              # Vite dev server for assets
+```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Testing
+```bash
+composer test            # Run all tests
+php artisan test        # Alternative test command
+```
 
-## Learning Laravel
+### Code Quality
+```bash
+./vendor/bin/pint       # Format PHP code
+./vendor/bin/pint --test # Check formatting without changes
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Database
+```bash
+php artisan migrate
+php artisan migrate:fresh --seed
+php artisan db:seed --class=AdminUserSeeder
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Production Build
+```bash
+npm run build
+php artisan optimize
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Architecture Overview
 
-## Laravel Sponsors
+### Authentication System
+- **Laravel Sanctum** for API token authentication
+- Tokens created with `createToken('API Token')` - no expiration
+- Supports both token-based and stateful SPA authentication
+- Key endpoints: `/api/register`, `/api/login`, `/api/logout`, `/api/logout-all`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Role-Based Access Control
+- Two roles: `user` (default) and `admin`
+- Role stored as ENUM in users table
+- Custom `CheckRole` middleware (aliased as 'role')
+- User model methods: `isAdmin()`, `hasRole($role)`
 
-### Premium Partners
+### API Response Pattern
+All API responses follow this structure:
+```json
+{
+    "success": true/false,
+    "message": "Operation message",
+    "data": { ... }  // Optional
+}
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development/)**
-- **[Active Logic](https://activelogic.com)**
+### Route Organization
+1. **Public**: `/api/register`, `/api/login`
+2. **Protected** (`auth:sanctum`): `/api/user`, `/api/logout`
+3. **Admin** (`auth:sanctum`, `role:admin`): `/api/admin/users`, `/api/admin/users/{user}/role`
+
+### Key Files
+- **Controllers**: `app/Http/Controllers/` - AuthController handles authentication
+- **Models**: `app/Models/User.php` - includes role-checking methods
+- **Middleware**: `app/Http/Middleware/CheckRole.php` - role verification
+- **Routes**: `routes/api.php` - all API endpoints
+- **Config**: Uses SQLite database by default
+
+### Development Patterns
+- Direct controller logic (no service layer yet)
+- Eloquent ORM without repository pattern
+- Consistent JSON response structure
+- Strong input validation on all endpoints
+- Password security using Laravel's Password facade rules
+
+## API Routes
+
+### Public Routes (No Authentication Required)
+
+| Method | Endpoint | Description | Request Body |
+|--------|----------|-------------|--------------|
+| POST | `/api/register` | Register new user | `name`, `email`, `password`, `password_confirmation` |
+| POST | `/api/login` | User authentication | `email`, `password` |
+
+### Protected Routes (Require API Token)
+
+| Method | Endpoint | Description | Headers |
+|--------|----------|-------------|---------|
+| GET | `/api/user` | Get current user info | `Authorization: Bearer {token}` |
+| POST | `/api/logout` | Logout current session | `Authorization: Bearer {token}` |
+| POST | `/api/logout-all` | Logout all user sessions | `Authorization: Bearer {token}` |
+
+### Admin-Only Routes (Require Admin Role)
+
+| Method | Endpoint | Description | Headers | Request Body |
+|--------|----------|-------------|---------|--------------|
+| GET | `/api/admin/users` | List all users | `Authorization: Bearer {admin_token}` | - |
+| PUT | `/api/admin/users/{id}/role` | Update user role | `Authorization: Bearer {admin_token}` | `role: "user"\|"admin"` |
+
+### Response Examples
+
+**Successful Login/Register:**
+```json
+{
+  "success": true,
+  "message": "Login successful",
+  "user": {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john@example.com",
+    "role": "user"
+  },
+  "token": "1|abc123...",
+  "token_type": "Bearer"
+}
+```
+
+**Error Response:**
+```json
+{
+  "success": false,
+  "message": "Insufficient permissions."
+}
+```
+
+### Test Accounts
+- **Admin**: `admin@unilunch.com` / `password123`
+- **User**: `user@unilunch.com` / `password123`
+
+## Future Development Roadmap
+
+### Phase 1: Core Lunch Management (Next Sprint)
+- [ ] **Menu Management**
+  - CRUD operations for daily menus
+  - Menu categories (breakfast, lunch, dinner, snacks)
+  - Nutritional information tracking
+  - Price management
+
+- [ ] **Order System**
+  - Place lunch orders
+  - Order history
+  - Order status tracking (pending, confirmed, ready, completed)
+  - Order cancellation (within time limits)
+
+### Phase 2: Enhanced Features
+- [ ] **Payment Integration**
+  - Campus card/wallet system
+  - Payment history
+  - Balance management
+  - Refund processing
+
+- [ ] **Notification System**
+  - Order confirmations
+  - Menu updates
+  - Special offers
+  - Queue notifications
+
+- [ ] **Queue Management**
+  - Real-time queue status
+  - Estimated pickup times
+  - QR code pickup system
+
+### Phase 3: Analytics & Optimization
+- [ ] **Admin Dashboard**
+  - Sales analytics
+  - Popular items tracking
+  - User behavior insights
+  - Revenue reporting
+
+- [ ] **Inventory Management**
+  - Stock tracking
+  - Low inventory alerts
+  - Supplier management
+  - Waste tracking
+
+### Phase 4: Advanced Features
+- [ ] **Multi-Location Support**
+  - Multiple dining halls
+  - Location-specific menus
+  - Campus-wide ordering
+
+- [ ] **Social Features**
+  - User reviews and ratings
+  - Menu recommendations
+  - Group ordering
+  - Favorite items
+
+- [ ] **Mobile App Integration**
+  - Push notifications
+  - Offline mode
+  - Biometric authentication
+  - Campus integration
+
+### Phase 5: Enterprise Features
+- [ ] **Advanced Authentication**
+  - SSO integration
+  - Multi-factor authentication
+  - Password reset via email
+  - Account verification
+
+- [ ] **Performance & Scalability**
+  - API rate limiting
+  - Database optimization
+  - Caching layer (Redis)
+  - Load balancing preparation
+
+- [ ] **Security Enhancements**
+  - API versioning
+  - Request logging
+  - Security headers
+  - Vulnerability scanning
+
+### Technical Debt & Improvements
+- [ ] **Code Architecture**
+  - Implement service layer pattern
+  - Add repository pattern for complex queries
+  - Create form request classes
+  - Add API resources for response transformation
+
+- [ ] **Testing**
+  - Unit tests for all models
+  - Feature tests for all endpoints
+  - Integration tests
+  - Performance testing
+
+- [ ] **Documentation**
+  - OpenAPI/Swagger documentation
+  - Postman collection
+  - Developer onboarding guide
+  - API versioning strategy
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1. Fork the repository
+2. Create feature branch (`git checkout -b feature/lunch-orders`)
+3. Commit changes (`git commit -am 'Add lunch ordering system'`)
+4. Push to branch (`git push origin feature/lunch-orders`)
+5. Create Pull Request
 
-## Code of Conduct
+## Development Standards
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- Follow PSR-12 coding standards
+- Use Laravel best practices
+- Write tests for new features
+- Update documentation
+- Use conventional commit messages
