@@ -3,33 +3,47 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../utils/apiClient";
 import { Settings, Leaf, Flame } from "lucide-react";
-import { Card, Button, Label, Input, Badge, Separator, Switch } from "../components/ui";
+import {
+  Card,
+  Button,
+  Label,
+  Input,
+  Badge,
+  Separator,
+  Switch,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "../components/ui";
+import { useAuth } from "../hooks/useAuth";
+import { useLanguage } from "../hooks/useLanguage";
 
 export default function AccountPage() {
-  const { data: user } = useQuery(["currentUser"], apiClient.getCurrentUser);
+  const { t } = useLanguage();
+  const auth = useAuth();
+  const { data: user } = useQuery({
+    queryKey: ["currentUser"],
+    queryFn: apiClient.getCurrentUser,
+    enabled: auth.status === "authenticated",
+  });
   const [paymentMethod, setPaymentMethod] = useState("cash");
-  const [theme, setTheme] = useState("light");
-
-  const handleThemeChange = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    // Apply theme change logic
-  };
 
   return (
     <div className="container mx-auto py-6 px-4">
-      <h1 className="text-3xl font-bold mb-6">Account Settings</h1>
+      <h1 className="text-3xl font-bold mb-6">{t('common.settings')}</h1>
 
       <Card>
         <CardHeader>
-          <CardTitle>Profile Information</CardTitle>
+          <CardTitle>{t('common.profileInfo')}</CardTitle>
           <CardDescription>
-            Manage your account details and preferences
+            {t('common.manageAccount')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Email Address</Label>
+            <Label htmlFor="email">{t('common.email')}</Label>
             <Input
               id="email"
               value={user?.email || ""}
@@ -39,10 +53,10 @@ export default function AccountPage() {
           </div>
 
           <div className="space-y-2">
-            <Label>Account Type</Label>
+            <Label>{t('common.accountType')}</Label>
             <div className="flex items-center gap-2">
               <Badge variant={user?.isAdmin ? "default" : "outline"}>
-                {user?.isAdmin ? "Administrator" : "Student"}
+                {user?.isAdmin ? t('common.administrator') : t('common.student')}
               </Badge>
             </div>
           </div>
@@ -50,23 +64,7 @@ export default function AccountPage() {
           <Separator className="my-4" />
 
           <div className="space-y-3">
-            <h3 className="font-medium">Appearance</h3>
-            <div className="flex items-center justify-between">
-              <Label>Theme Mode</Label>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleThemeChange}
-              >
-                Switch to {theme === "light" ? "Dark" : "Light"}
-              </Button>
-            </div>
-          </div>
-
-          <Separator className="my-4" />
-
-          <div className="space-y-3">
-            <h3 className="font-medium">Payment Methods</h3>
+            <h3 className="font-medium">{t('common.paymentMethods')}</h3>
             <div className="space-y-2">
               <div className="flex items-center space-x-2">
                 <input
@@ -78,7 +76,7 @@ export default function AccountPage() {
                   onChange={(e) => setPaymentMethod(e.target.value)}
                   className="h-4 w-4"
                 />
-                <Label htmlFor="cash">Cash Payment</Label>
+                <Label htmlFor="cash">{t('common.cashPayment')}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <input
@@ -96,7 +94,7 @@ export default function AccountPage() {
           </div>
         </CardContent>
         <CardFooter className="flex justify-end">
-          <Button>Save Changes</Button>
+          <Button>{t('common.save')}</Button>
         </CardFooter>
       </Card>
     </div>
