@@ -3,14 +3,17 @@ import React from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { apiClient } from "../utils/apiClient";
-import { Calendar } from "lucide-react";
+import { Calendar, Leaf, Flame } from "lucide-react";
 import { Button, Card, Badge } from "../components/ui";
+import { useLanguage } from "../hooks/useLanguage";
 
 export default function ReservationsPage() {
-  const { data: reservations = [] } = useQuery(
-    ["userReservations"],
-    apiClient.listUserReservations
-  );
+  const { t } = useLanguage();
+  const { data: reservations = [] } = useQuery({
+    queryKey: ["userReservations"],
+    queryFn: apiClient.listUserReservations
+  });
+  
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -24,19 +27,18 @@ export default function ReservationsPage() {
     });
   };
 
-  const cancelReservationMutation = useMutation(
-    apiClient.cancelReservation,
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["userReservations"]);
-      },
-    }
-  );
-
-  const rebookMealMutation = useMutation(apiClient.createReservation, {
+  const cancelReservationMutation = useMutation({
+    mutationFn: apiClient.cancelReservation,
     onSuccess: () => {
-      queryClient.invalidateQueries(["userReservations"]);
-    },
+      queryClient.invalidateQueries({ queryKey: ["userReservations"] });
+    }
+  });
+
+  const rebookMealMutation = useMutation({
+    mutationFn: apiClient.createReservation,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["userReservations"] });
+    }
   });
 
   const handleRebookMeal = (mealId) => {
@@ -51,17 +53,16 @@ export default function ReservationsPage() {
   return (
     <div className="container mx-auto py-6 px-4">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">My Reservations</h1>
-        <Button onClick={() => navigate("/menu")}>Book New Reservation</Button>
+        <h1 className="text-3xl font-bold">{t('reservations.title')}</h1>
       </div>
 
       {reservations.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-muted-foreground">
-            You don't have any reservations yet.
+            {t('reservations.noReservations')}
           </p>
           <Button className="mt-4" onClick={() => navigate("/menu")}>
-            Browse Menu
+            {t('reservations.browseMenu')}
           </Button>
         </div>
       ) : (
@@ -93,17 +94,15 @@ export default function ReservationsPage() {
                         size="sm"
                         onClick={() => handleRebookMeal(reservation.meal.id)}
                       >
-                        Rebook
+                        {t('reservations.rebook')}
                       </Button>
                       <Button
                         variant="outline"
                         size="sm"
                         className="text-destructive"
-                        onClick={() =>
-                          cancelReservationMutation.mutate(reservation.id)
-                        }
+                        onClick={() => cancelReservationMutation.mutate(reservation.id)}
                       >
-                        Cancel
+                        {t('reservations.cancel')}
                       </Button>
                     </div>
                   </div>
