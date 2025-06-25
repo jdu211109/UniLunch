@@ -15,15 +15,25 @@ export default function MealCard({
   return (
     <Card className="overflow-hidden">
       <div className="aspect-[4/3] w-full overflow-hidden relative">
-        <img
-          src={meal.imageUrl}
-          alt={meal.name}
-          className="h-full w-full object-cover transition-all hover:scale-105"
-          onError={(e) => {
-            e.currentTarget.onerror = null;
-            e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(meal.name)}&background=random&size=256`;
-          }}
-        />
+        {meal.imageUrl ? (
+          <img
+            src={meal.imageUrl}
+            alt={meal.name}
+            className="h-full w-full object-cover transition-all hover:scale-105"
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(meal.name)}&background=random&size=256`;
+            }}
+          />
+        ) : (
+          <div className="h-full w-full bg-gray-200 flex items-center justify-center">
+            <img
+              src={`https://ui-avatars.com/api/?name=${encodeURIComponent(meal.name)}&background=random&size=256`}
+              alt={meal.name}
+              className="h-full w-full object-cover"
+            />
+          </div>
+        )}
         <button
           onClick={onToggleFavorite}
           className="absolute top-2 right-2 p-1 rounded-full bg-background/80 hover:bg-background transition-colors"

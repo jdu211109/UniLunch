@@ -22,12 +22,26 @@ const AlertDialogDescription = AlertDialogPrimitive.Description;
 const AlertDialogAction = AlertDialogPrimitive.Action;
 const AlertDialogCancel = AlertDialogPrimitive.Cancel;
 
+const AlertDialogHeader = ({ children, ...props }) => (
+  <div className="mb-4" {...props}>
+    {children}
+  </div>
+);
+
+const AlertDialogFooter = ({ children, ...props }) => (
+  <div className="flex justify-end gap-2 mt-4" {...props}>
+    {children}
+  </div>
+);
+
 export {
   AlertDialog,
   AlertDialogTrigger,
   AlertDialogContent,
+  AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogDescription,
+  AlertDialogFooter,
   AlertDialogAction,
   AlertDialogCancel
 };

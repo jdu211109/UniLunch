@@ -3,25 +3,38 @@ import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "../utils/apiClient";
 import { Plus, Edit, Trash2, Leaf, Flame } from "lucide-react";
-import { Button, Card, Badge, AlertDialog } from "../components/ui";
+import { Button, Card, Badge, AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "../components/ui";
 import MealFormDialog from "../components/meals/MealFormDialog";
 
 export default function AdminPage() {
   const queryClient = useQueryClient();
-  const { data: meals = [] } = useQuery(["meals"], apiClient.listMeals);
+  const { data: meals = [] } = useQuery({
+    queryKey: ["meals"],
+    queryFn: apiClient.listMeals
+  });
   const [isAddMealOpen, setIsAddMealOpen] = useState(false);
   const [editingMeal, setEditingMeal] = useState(null);
 
-  const createMealMutation = useMutation(apiClient.createMeal, {
+  const createMealMutation = useMutation({
+    mutationFn: apiClient.createMeal,
     onSuccess: () => {
-      queryClient.invalidateQueries(["meals"]);
+      queryClient.invalidateQueries({ queryKey: ["meals"] });
       setIsAddMealOpen(false);
     },
   });
 
-  const deleteMealMutation = useMutation(apiClient.deleteMeal, {
+  const updateMealMutation = useMutation({
+    mutationFn: apiClient.updateMeal,
     onSuccess: () => {
-      queryClient.invalidateQueries(["meals"]);
+      queryClient.invalidateQueries({ queryKey: ["meals"] });
+      setEditingMeal(null);
+    },
+  });
+
+  const deleteMealMutation = useMutation({
+    mutationFn: apiClient.deleteMeal,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["meals"] });
     },
   });
 
@@ -116,7 +129,7 @@ export default function AdminPage() {
         isOpen={isAddMealOpen}
         onClose={() => setIsAddMealOpen(false)}
         onSubmit={(data) => createMealMutation.mutate(data)}
-        isLoading={createMealMutation.isLoading}
+        isLoading={createMealMutation.isPending}
       />
       {editingMeal && (
         <MealFormDialog
@@ -125,7 +138,7 @@ export default function AdminPage() {
           onSubmit={(data) =>
             updateMealMutation.mutate({ id: editingMeal.id, ...data })
           }
-          isLoading={updateMealMutation.isLoading}
+          isLoading={updateMealMutation.isPending}
           initialData={editingMeal}
         />
       )}

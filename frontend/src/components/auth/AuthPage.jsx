@@ -1,37 +1,56 @@
-// src/pages/AuthPage.jsx
+// src/components/auth/AuthPage.jsx
 import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "../../hooks/useAuth.jsx";
-import { useToast } from "../navigation/useToast.jsx";
-import { Lock, Mail, Eye, EyeOff } from "lucide-react";
+import { useToastContext } from "../../hooks/useToastContext.js";
+import { Lock, Mail, Eye, EyeOff, User } from "lucide-react";
 
 export default function AuthPage() {
   const auth = useAuth();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
+    name: "",
     email: "",
-    password: ""
+    password: "",
+    password_confirmation: ""
   });
-  const { toast } = useToast();
+  const { toast } = useToastContext();
 
-  const signUpMutation = useMutation({
-    mutationFn: async (data) => {
-      // Здесь должен быть ваш API запрос
-      return Promise.resolve(data);
+  const loginMutation = useMutation({
+    mutationFn: async (credentials) => {
+      return await auth.signIn(credentials);
     },
     onSuccess: () => {
       toast({
-        title: "Success",
-        description: "You have successfully signed up",
+        title: "Успешно!",
+        description: "Вы успешно вошли в систему",
       });
-      auth.signIn({ email: formData.email });
     },
     onError: (error) => {
       toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to sign up",
+        title: "Ошибка входа",
+        description: error instanceof Error ? error.message : "Не удалось войти в систему",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const signUpMutation = useMutation({
+    mutationFn: async (userData) => {
+      return await auth.signUp(userData);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Успешно!",
+        description: "Регистрация прошла успешно",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Ошибка регистрации",
+        description: error instanceof Error ? error.message : "Не удалось зарегистрироваться",
         variant: "destructive",
       });
     },
@@ -39,10 +58,28 @@ export default function AuthPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!isLogin) {
-      signUpMutation.mutate(formData);
+    
+    if (isLogin) {
+      loginMutation.mutate({
+        email: formData.email,
+        password: formData.password
+      });
     } else {
-      auth.signIn({ email: formData.email });
+      if (formData.password !== formData.password_confirmation) {
+        toast({
+          title: "Ошибка",
+          description: "Пароли не совпадают",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      signUpMutation.mutate({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        password_confirmation: formData.password_confirmation
+      });
     }
   };
 
@@ -55,21 +92,40 @@ export default function AuthPage() {
     return <Navigate to="/menu" />;
   }
 
+  const isLoading = loginMutation.isPending || signUpMutation.isPending;
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 p-4">
       <div className="w-full max-w-md bg-white rounded-xl shadow-lg overflow-hidden">
         <div className="p-8">
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-gray-800 mb-2">
-              {isLogin ? "Welcome Back" : "Create an Account"}
+              {isLogin ? "Добро пожаловать!" : "Создать аккаунт"}
             </h2>
             <p className="text-gray-600">
-              {isLogin ? "Enter your credentials to sign in" : "Fill the form to register"}
+              {isLogin ? "Введите свои данные для входа" : "Заполните форму для регистрации"}
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-4">
+              {!isLogin && (
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <User className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="Полное имя"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                    required
+                  />
+                </div>
+              )}
+
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Mail className="h-5 w-5 text-gray-400" />
@@ -94,7 +150,7 @@ export default function AuthPage() {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  placeholder="Password"
+                  placeholder="Пароль"
                   className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                   required
                   minLength={6}
@@ -111,6 +167,24 @@ export default function AuthPage() {
                   )}
                 </button>
               </div>
+
+              {!isLogin && (
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Lock className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    type="password"
+                    name="password_confirmation"
+                    value={formData.password_confirmation}
+                    onChange={handleChange}
+                    placeholder="Подтвердите пароль"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                    required
+                    minLength={6}
+                  />
+                </div>
+              )}
             </div>
 
             {isLogin && (
@@ -119,7 +193,7 @@ export default function AuthPage() {
                   href="#forgot-password"
                   className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
                 >
-                  Forgot password?
+                  Забыли пароль?
                 </a>
               </div>
             )}
@@ -127,11 +201,11 @@ export default function AuthPage() {
             <button
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition duration-200 disabled:opacity-50"
-              disabled={signUpMutation.isPending}
+              disabled={isLoading}
             >
-              {signUpMutation.isPending 
-                ? "Processing..." 
-                : isLogin ? "Sign In" : "Sign Up"}
+              {isLoading 
+                ? "Обработка..." 
+                : isLogin ? "Войти" : "Зарегистрироваться"}
             </button>
           </form>
 
@@ -141,9 +215,9 @@ export default function AuthPage() {
               className="text-blue-600 hover:text-blue-800 font-medium"
             >
               {isLogin ? (
-                <>Don't have an account? <span className="underline">Sign Up</span></>
+                <>Нет аккаунта? <span className="underline">Зарегистрироваться</span></>
               ) : (
-                <>Already have an account? <span className="underline">Sign In</span></>
+                <>Уже есть аккаунт? <span className="underline">Войти</span></>
               )}
             </button>
           </div>
@@ -151,9 +225,9 @@ export default function AuthPage() {
 
         <div className="bg-gray-50 px-8 py-6 text-center">
           <p className="text-gray-600 text-sm">
-            By continuing, you agree to our{" "}
+            Продолжая, вы соглашаетесь с нашими{" "}
             <a href="#terms" className="text-blue-600 hover:underline">
-              Terms of Service
+              Правилами использования
             </a>
           </p>
         </div>
