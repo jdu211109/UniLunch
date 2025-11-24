@@ -102,7 +102,7 @@ export default function MenusManager() {
                             </div>
                         </div>
 
-                        <div className="p-6 pt-0 flex justify-end gap-2 mt-auto border-t">
+                        <div className="p-4 pt-4 flex justify-end gap-2 mt-auto border-t">
                             <Button
                                 variant="outline"
                                 size="sm"
