@@ -21,8 +21,10 @@ export default function MealCard({
   onReserve,
   onToggleFavorite,
 }) {
+  const isAvailable = meal.isAvailable !== false;
+
   return (
-    <Card className="overflow-hidden group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-background to-muted/20 flex flex-col h-full">
+    <Card className={`overflow-hidden group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-background to-muted/20 flex flex-col h-full ${!isAvailable ? 'grayscale opacity-80' : ''}`}>
       <div className="aspect-[4/3] w-full overflow-hidden relative">
         <img
           src={meal.imageUrl}
@@ -34,6 +36,13 @@ export default function MealCard({
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        {!isAvailable && (
+          <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10">
+            <span className="text-white font-bold text-xl border-2 border-white px-4 py-2 rounded-md transform -rotate-12">
+              SOLD OUT
+            </span>
+          </div>
+        )}
         <button
           onClick={onToggleFavorite}
           className="absolute top-3 right-3 p-2 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-110"
@@ -99,16 +108,17 @@ export default function MealCard({
               size="icon"
               onClick={onDecreaseQuantity}
               className="h-8 w-8 rounded-full hover:bg-background hover:shadow-sm"
-              disabled={quantity === 0}
+              disabled={quantity === 0 || !isAvailable}
             >
               -
             </Button>
             <div className="flex-1 text-center font-semibold">{quantity}</div>
             <Button
-                          variant="ghost"
+              variant="ghost"
               size="icon"
               onClick={onIncreaseQuantity}
               className="h-8 w-8 rounded-full hover:bg-background hover:shadow-sm"
+              disabled={!isAvailable}
             >
               +
             </Button>
@@ -116,9 +126,9 @@ export default function MealCard({
           <Button
             className="flex-1 rounded-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 h-10"
             onClick={onReserve}
-            disabled={quantity === 0}
+            disabled={quantity === 0 || !isAvailable}
           >
-            Reserve
+            {isAvailable ? 'Reserve' : 'Sold Out'}
           </Button>
         </div>
       </CardFooter>
