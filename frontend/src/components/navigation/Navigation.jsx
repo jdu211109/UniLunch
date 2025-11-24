@@ -154,7 +154,7 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => {}
                     <Calendar size={16} />
                     <span className="hidden lg:inline">{t('common.orders')}</span>
                     {reservations?.length > 0 && (
-                      <Badge variant="secondary" className="ml-1 h-5 min-w-5 text-xs bg-orange-500 text-white hover:bg-orange-600">
+                      <Badge variant="secondary" className="ml-1 h-5 min-w-5 text-xs bg-orange-600 dark:bg-orange-500 text-white hover:bg-orange-700 dark:hover:bg-orange-600">
                         {reservations.length}
                       </Badge>
                     )}
@@ -267,7 +267,7 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => {}
                     <Calendar size={18} />
                     <span className="font-medium">{t('common.orders')}</span>
                     {reservations?.length > 0 && (
-                      <Badge variant="secondary" className="ml-auto h-6 min-w-6 bg-orange-500 text-white">
+                      <Badge variant="secondary" className="ml-auto h-6 min-w-6 bg-orange-600 dark:bg-orange-500 text-white hover:bg-orange-700 dark:hover:bg-orange-600">
                         {reservations.length}
                       </Badge>
                     )}

@@ -35,13 +35,14 @@ export default function MenuPage() {
     enabled: !!apiClient.getUserFavorites,
   })
 
-  const createReservationMutation = useMutation({
-    mutationFn: apiClient.createReservation,
+  const createOrderMutation = useMutation({
+    mutationFn: apiClient.createOrder,
     onSuccess: () => {
       toast({
         title: 'Success',
-        description: 'Reservation created successfully',
+        description: 'Order placed successfully',
       })
+      setQuantities({}); // Reset quantities
       queryClient.invalidateQueries({ queryKey: ['userReservations'] })
     },
   })
@@ -92,20 +93,38 @@ export default function MenuPage() {
               }))
             }
             onReserve={() => {
-              if (quantities[meal.id] > 0) {
-                createReservationMutation.mutate({
-                  mealId: meal.id,
-                  quantity: quantities[meal.id],
-                })
-                // Сбрасываем количество после заказа
-                setQuantities((prev) => ({ ...prev, [meal.id]: 0 }))
-              }
+              // No-op for individual reserve button in this flow, or could be "Add 1 to cart"
+              // For now, we rely on the quantity selectors and the main "Place Order" button
+              setQuantities((prev) => ({
+                ...prev,
+                [meal.id]: (prev[meal.id] || 0) + 1,
+              }))
             }}
             onToggleFavorite={() => toggleFavoriteMutation.mutate(meal.id)}
             isFavorite={favoriteMealIds.includes(meal.id)}
           />
         ))}
       </div>
+
+      {/* Floating Order Button */}
+      {Object.values(quantities).some(q => q > 0) && (
+        <div className="fixed bottom-6 right-6 z-50">
+          <Button
+            size="lg"
+            className="shadow-lg"
+            onClick={() => {
+              const items = Object.entries(quantities)
+                .filter(([_, q]) => q > 0)
+                .map(([mealId, quantity]) => ({ mealId, quantity }));
+
+              createOrderMutation.mutate({ items });
+            }}
+            disabled={createOrderMutation.isPending}
+          >
+            {createOrderMutation.isPending ? 'Placing Order...' : `Place Order (${Object.values(quantities).reduce((a, b) => a + b, 0)} items)`}
+          </Button>
+        </div>
+      )}
     </div>
   )
 }
