@@ -79,7 +79,7 @@ export default function ReservationsPage() {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="text-destructive hover:bg-destructive/10 ml-1"
+                      className="text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-red-700 dark:hover:text-red-300 ml-1"
                       onClick={() => deleteReservationMutation.mutate(reservation.id)}
                     >
                       <Trash2 size={16} />
