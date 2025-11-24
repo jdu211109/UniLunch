@@ -20,11 +20,13 @@ export default function OrdersManager() {
         },
     });
 
-    const filteredOrders = orders.filter(order =>
-        order.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        order.mealName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        order.id.includes(searchTerm)
-    );
+    const filteredOrders = orders.filter(order => {
+        const term = searchTerm.toLowerCase();
+        return order.userName.toLowerCase().includes(term) ||
+               order.mealName?.toLowerCase().includes(term) ||
+               order.items?.some(item => item.mealName?.toLowerCase().includes(term)) ||
+               order.id.includes(searchTerm);
+    });
 
     const getStatusBadge = (status) => {
         switch (status) {
