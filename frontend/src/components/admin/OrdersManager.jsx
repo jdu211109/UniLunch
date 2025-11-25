@@ -23,15 +23,15 @@ export default function OrdersManager() {
     const filteredOrders = orders.filter(order => {
         const term = searchTerm.toLowerCase();
         return order.userName.toLowerCase().includes(term) ||
-               order.mealName?.toLowerCase().includes(term) ||
-               order.items?.some(item => item.mealName?.toLowerCase().includes(term)) ||
-               order.id.includes(searchTerm);
+            order.mealName?.toLowerCase().includes(term) ||
+            order.items?.some(item => item.mealName?.toLowerCase().includes(term)) ||
+            order.id.includes(searchTerm);
     });
 
     const getStatusBadge = (status) => {
         switch (status) {
             case "completed":
-                return <Badge className="bg-green-600 hover:bg-green-700 text-white border-transparent">Completed</Badge>;
+                return <Badge className="!bg-green-600 hover:!bg-green-700 !text-white border-transparent">Completed</Badge>;
             case "cancelled":
                 return <Badge variant="destructive">Cancelled</Badge>;
             default:
@@ -114,7 +114,7 @@ export default function OrdersManager() {
                                     <div className="flex gap-2">
                                         <Button
                                             size="sm"
-                                            className="bg-green-600 hover:bg-green-700 text-white"
+                                            className="!bg-green-600 hover:!bg-green-700 !text-white border-transparent"
                                             onClick={() => updateStatusMutation.mutate({ id: order.id, status: 'completed' })}
                                         >
                                             <CheckCircle size={16} className="mr-1" />

@@ -5,13 +5,13 @@ import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../../utils/apiClient.js";
 import { useAuth } from "../../hooks/useAuth.jsx";
 import { useLanguage } from "../../hooks/useLanguage";
-import { 
-  ChevronDown, 
-  Menu, 
-  X, 
-  Calendar, 
-  User, 
-  LogOut, 
+import {
+  ChevronDown,
+  Menu,
+  X,
+  Calendar,
+  User,
+  LogOut,
   Settings,
   Sun,
   Moon,
@@ -30,7 +30,7 @@ import {
   Switch
 } from "../ui/index.js";
 
-export default function Navigation({ searchQuery = "", setSearchQuery = () => {} }) {
+export default function Navigation({ searchQuery = "", setSearchQuery = () => { } }) {
   const [isOpen, setIsOpen] = useState(false);
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -38,7 +38,7 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => {}
     }
     return 'light';
   });
-  
+
   const { language, setLanguage, t } = useLanguage();
   const auth = useAuth();
   const navigate = useNavigate();
@@ -81,7 +81,7 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => {}
               UniLunch
             </span>
           </Link>
-          
+
           {/* Desktop Search */}
           {isMenuPage && auth.status === "authenticated" && (
             <div className="relative hidden md:block">
@@ -121,9 +121,9 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => {}
             <>
               {/* Theme and Language controls */}
               <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-muted/50 border border-border/50">
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
+                <Button
+                  variant="ghost"
+                  size="icon"
                   onClick={toggleTheme}
                   className="w-8 h-8 p-0 hover:bg-background/80 rounded-full transition-all duration-200"
                   title={theme === 'light' ? t('common.switchTo') + ' ' + t('common.dark') : t('common.switchTo') + ' ' + t('common.light')}
@@ -131,9 +131,9 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => {}
                   <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
                   <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
                 </Button>
-                
+
                 <div className="w-px h-4 bg-border" />
-                
+
                 <select
                   value={language}
                   onChange={(e) => setLanguage(e.target.value)}
@@ -154,13 +154,13 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => {}
                     <Calendar size={16} />
                     <span className="hidden lg:inline">{t('common.orders')}</span>
                     {reservations?.length > 0 && (
-                      <Badge variant="secondary" className="ml-1 h-5 min-w-5 text-xs bg-orange-600 dark:bg-orange-500 text-white hover:bg-orange-700 dark:hover:bg-orange-600">
+                      <Badge variant="secondary" className="ml-1 h-5 min-w-5 text-xs !bg-orange-600 dark:!bg-orange-500 !text-white hover:!bg-orange-700 dark:hover:!bg-orange-600">
                         {reservations.length}
                       </Badge>
                     )}
                   </Link>
                 </Button>
-                
+
                 {user?.isAdmin && (
                   <Button asChild variant="ghost" className="h-9 px-4 rounded-full hover:bg-accent transition-all duration-200">
                     <Link to="/admin" className="flex items-center gap-2">
@@ -174,8 +174,8 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => {}
               {/* User menu dropdown */}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button 
-                    variant="ghost" 
+                  <Button
+                    variant="ghost"
                     className="h-9 gap-2 px-3 rounded-full hover:bg-accent transition-all duration-200 border border-border/50"
                   >
                     <div className="w-6 h-6 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center">
@@ -187,8 +187,8 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => {}
                     <ChevronDown size={14} className="opacity-60" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent 
-                  align="end" 
+                <DropdownMenuContent
+                  align="end"
                   className="w-56 p-2 bg-background/95 backdrop-blur border border-border/50 shadow-lg"
                   sideOffset={8}
                 >
@@ -198,19 +198,19 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => {}
                       {user?.isAdmin ? t('common.administrator') : t('common.student')}
                     </p>
                   </div>
-                  
-                  <DropdownMenuItem 
+
+                  <DropdownMenuItem
                     onSelect={() => navigate("/account")}
                     className="h-9 cursor-pointer rounded-lg focus:bg-accent/80 transition-colors duration-200"
                   >
                     <Settings size={16} className="mr-3 text-muted-foreground" />
                     <span>{t('common.settings')}</span>
                   </DropdownMenuItem>
-                  
+
                   <DropdownMenuSeparator className="my-2 bg-border/50" />
-                  
-                  <DropdownMenuItem 
-                    onSelect={() => auth.signOut()} 
+
+                  <DropdownMenuItem
+                    onSelect={() => auth.signOut()}
                     className="h-9 cursor-pointer rounded-lg focus:bg-destructive/10 focus:text-destructive text-destructive/80 hover:text-destructive transition-colors duration-200"
                   >
                     <LogOut size={16} className="mr-3" />
@@ -224,9 +224,8 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => {}
 
         {/* Mobile navigation */}
         <div
-          className={`${
-            isOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
-          } md:hidden fixed top-16 right-0 w-80 max-w-[90vw] h-[calc(100vh-4rem)] bg-background/95 backdrop-blur border-l border-border/50 shadow-xl transition-all duration-300 ease-in-out overflow-y-auto`}
+          className={`${isOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
+            } md:hidden fixed top-16 right-0 w-80 max-w-[90vw] h-[calc(100vh-4rem)] bg-background/95 backdrop-blur border-l border-border/50 shadow-xl transition-all duration-300 ease-in-out overflow-y-auto`}
         >
           {auth.status === "authenticated" && (
             <div className="p-6 space-y-6">
@@ -259,7 +258,7 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => {}
                   </div>
                 </div>
               )}
-              
+
               {/* Mobile navigation links */}
               <div className="space-y-2">
                 <Button asChild variant="ghost" className="w-full justify-start h-12 rounded-xl hover:bg-accent/80 transition-all duration-200" onClick={() => setIsOpen(false)}>
@@ -267,13 +266,13 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => {}
                     <Calendar size={18} />
                     <span className="font-medium">{t('common.orders')}</span>
                     {reservations?.length > 0 && (
-                      <Badge variant="secondary" className="ml-auto h-6 min-w-6 bg-orange-600 dark:bg-orange-500 text-white hover:bg-orange-700 dark:hover:bg-orange-600">
+                      <Badge variant="secondary" className="ml-auto h-6 min-w-6 !bg-orange-600 dark:!bg-orange-500 !text-white hover:!bg-orange-700 dark:hover:!bg-orange-600">
                         {reservations.length}
                       </Badge>
                     )}
                   </Link>
                 </Button>
-                
+
                 {user?.isAdmin && (
                   <Button asChild variant="ghost" className="w-full justify-start h-12 rounded-xl hover:bg-accent/80 transition-all duration-200" onClick={() => setIsOpen(false)}>
                     <Link to="/admin" className="flex items-center gap-3">
@@ -282,7 +281,7 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => {}
                     </Link>
                   </Button>
                 )}
-                
+
                 <Button asChild variant="ghost" className="w-full justify-start h-12 rounded-xl hover:bg-accent/80 transition-all duration-200" onClick={() => setIsOpen(false)}>
                   <Link to="/account" className="flex items-center gap-3">
                     <User size={18} />
@@ -292,7 +291,7 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => {}
               </div>
 
               <Separator className="bg-border/50" />
-              
+
               {/* Theme and Language controls */}
               <div className="space-y-4">
                 <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50 border border-border/50">
@@ -306,7 +305,7 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => {}
                     className="data-[state=checked]:bg-orange-500"
                   />
                 </div>
-                
+
                 <div className="p-4 rounded-xl bg-muted/50 border border-border/50">
                   <div className="flex items-center gap-3 mb-3">
                     <Globe size={18} />
@@ -324,9 +323,9 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => {}
                   </select>
                 </div>
               </div>
-              
+
               <Separator className="bg-border/50" />
-              
+
               {/* Logout button */}
               <Button
                 variant="ghost"
@@ -345,7 +344,7 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => {}
 
         {/* Mobile overlay */}
         {isOpen && (
-          <div 
+          <div
             className="md:hidden fixed inset-0 top-16 bg-black/20 backdrop-blur-sm transition-opacity duration-300"
             onClick={() => setIsOpen(false)}
           />

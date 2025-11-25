@@ -104,6 +104,9 @@ export const apiClient = {
 
     if (response.success && response.token) {
       localStorage.setItem('auth_token', response.token);
+      if (response.user) {
+        localStorage.setItem('user_info', JSON.stringify(response.user));
+      }
     }
 
     return response;
@@ -122,6 +125,9 @@ export const apiClient = {
 
     if (response.success && response.token) {
       localStorage.setItem('auth_token', response.token);
+      if (response.user) {
+        localStorage.setItem('user_info', JSON.stringify(response.user));
+      }
     }
 
     return response;
@@ -150,6 +156,7 @@ export const apiClient = {
       console.error('Logout API error:', error);
     } finally {
       localStorage.removeItem('auth_token');
+      localStorage.removeItem('user_info');
     }
   },
 
@@ -278,10 +285,14 @@ export const apiClient = {
       };
     });
 
+    const userInfo = JSON.parse(localStorage.getItem('user_info') || '{}');
+    const finalUserId = userId || userInfo.id || 'user-1';
+    const finalUserName = userName || userInfo.name || 'John Doe';
+
     const newOrder = {
       id: Date.now().toString(),
-      userId: userId || 'user-1',
-      userName: userName || 'John Doe',
+      userId: finalUserId,
+      userName: finalUserName,
       items: enrichedItems,
       totalPrice,
       status: 'pending',
@@ -305,8 +316,12 @@ export const apiClient = {
   listUserReservations: async () => {
     await delay(500);
     const reservations = getStoredData(STORAGE_KEYS.RESERVATIONS, []);
-    // In a real app, filter by current user
-    return reservations.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    const userInfo = JSON.parse(localStorage.getItem('user_info') || '{}');
+    const currentUserId = userInfo.id || 'user-1';
+
+    return reservations
+      .filter(r => r.userId === currentUserId)
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   },
 
   listAllReservations: async () => {

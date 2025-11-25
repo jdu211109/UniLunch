@@ -51,7 +51,7 @@ export default function MealsManager() {
                 {meals.map((meal) => (
                     <Card key={meal.id} className="overflow-hidden flex flex-col h-full">
                         <div className="flex flex-col h-full">
-                            <div className="w-full h-32 relative flex-shrink-0">
+                            <div className="w-full h-48 relative flex-shrink-0">
                                 <img
                                     src={meal.imageUrl}
                                     alt={meal.name}

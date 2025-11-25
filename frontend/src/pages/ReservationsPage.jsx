@@ -72,7 +72,7 @@ export default function ReservationsPage() {
                       ${(reservation.totalPrice || 0).toFixed(2)}
                     </p>
 
-                    {reservation.status === 'completed' && <Badge className="bg-green-500">Completed</Badge>}
+                    {reservation.status === 'completed' && <Badge className="!bg-green-600 hover:!bg-green-700 !text-white border-transparent">Completed</Badge>}
                     {reservation.status === 'cancelled' && <Badge variant="destructive">Cancelled</Badge>}
                     {reservation.status === 'pending' && <Badge variant="secondary" className="bg-yellow-500 text-white">Pending</Badge>}
 
