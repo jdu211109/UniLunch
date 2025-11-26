@@ -44,7 +44,7 @@ const getStoredData = (key, defaultData) => {
   try {
     const item = localStorage.getItem(key);
     return item ? JSON.parse(item) : defaultData;
-  } catch (e) {
+  } catch {
     return defaultData;
   }
 };
@@ -164,6 +164,36 @@ export const apiClient = {
     // Temporary mock - will be replaced with actual API call
     console.log('Mock signUp for:', email);
     return { success: true };
+  },
+
+  // Password Reset
+  sendResetCode: async ({ email }) => {
+    const response = await makeRequest('/password/send-code', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    });
+    return response;
+  },
+
+  verifyResetCode: async ({ email, code }) => {
+    const response = await makeRequest('/password/verify-code', {
+      method: 'POST',
+      body: JSON.stringify({ email, code }),
+    });
+    return response;
+  },
+
+  resetPassword: async ({ email, code, password, password_confirmation }) => {
+    const response = await makeRequest('/password/reset', {
+      method: 'POST',
+      body: JSON.stringify({
+        email,
+        code,
+        password,
+        password_confirmation
+      }),
+    });
+    return response;
   },
 
   // Meals
@@ -305,7 +335,7 @@ export const apiClient = {
   },
 
   // Deprecated: kept for backward compatibility if needed, but createOrder should be used
-  createReservation: async ({ mealId, menuId, quantity, userId, userName, date }) => {
+  createReservation: async ({ mealId, quantity, userId, userName }) => {
     return apiClient.createOrder({
       items: [{ mealId, quantity }],
       userId,
