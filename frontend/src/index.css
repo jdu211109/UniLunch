@@ -25,7 +25,9 @@
     --input: 240 5.9% 90%;
     --ring: 240 5.9% 10%;
     --radius: 0.5rem;
-  }  .dark {
+  }
+
+  .dark {
     --background: 220 8% 18%;
     --foreground: 0 0% 98%;
     --card: 220 8% 22%;
@@ -52,6 +54,7 @@
   * {
     border-color: hsl(var(--border));
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -81,4 +84,64 @@ select option {
 select {
   background: hsl(var(--background)) !important;
   color: hsl(var(--foreground)) !important;
+}
+
+/* ===== AUTH PAGE STYLES - SPLIT SCREEN ===== */
+
+/* Split Container */
+.auth-split-container {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+  isolation: isolate;
+}
+
+/* Background Image - Full Page */
+.auth-split-container::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url('https://st4.depositphotos.com/8153606/24906/i/450/depositphotos_249064398-stock-photo-traditional-uzbek-oriental-cuisine-uzbek.jpg');
+  background-size: cover;
+  background-position: center;
+  z-index: -2;
+}
+
+/* Background Overlay - Light darkening for readability */
+.auth-split-container::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: -1;
+}
+
+/* Left Side - Benefits */
+.auth-left-side {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 0;
+}
+
+/* Right Side - Form */
+.auth-right-side {
+  background: transparent;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 0;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .auth-left-side {
+    display: none !important;
+  }
+
+  .auth-right-side {
+    width: 100%;
+  }
 }
