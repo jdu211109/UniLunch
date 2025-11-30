@@ -18,7 +18,6 @@ export default function MealCard({
   quantity,
   onIncreaseQuantity,
   onDecreaseQuantity,
-  onReserve,
   onToggleFavorite,
 }) {
   const isAvailable = meal.isAvailable !== false;
@@ -101,35 +100,28 @@ export default function MealCard({
         </p>
       </CardContent>
       <CardFooter className="pt-4 border-t border-border/50">
-        <div className="flex w-full items-center gap-3">
-          <div className="flex items-center bg-muted/50 rounded-full p-1 w-32">
+        <div className="flex w-full items-center justify-center">
+          <div className="flex items-center bg-muted/50 rounded-full p-1">
             <Button
               variant="ghost"
               size="icon"
               onClick={onDecreaseQuantity}
-              className="h-8 w-8 rounded-full hover:bg-background hover:shadow-sm"
+              className="h-10 w-10 rounded-full hover:bg-background hover:shadow-sm text-lg font-bold"
               disabled={quantity === 0 || !isAvailable}
             >
               -
             </Button>
-            <div className="flex-1 text-center font-semibold">{quantity}</div>
+            <div className="w-12 text-center font-bold text-lg">{quantity}</div>
             <Button
               variant="ghost"
               size="icon"
               onClick={onIncreaseQuantity}
-              className="h-8 w-8 rounded-full hover:bg-background hover:shadow-sm"
+              className="h-10 w-10 rounded-full hover:bg-background hover:shadow-sm text-lg font-bold"
               disabled={!isAvailable}
             >
               +
             </Button>
           </div>
-          <Button
-            className="flex-1 rounded-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 h-10"
-            onClick={onReserve}
-            disabled={quantity === 0 || !isAvailable}
-          >
-            {isAvailable ? 'Reserve' : 'Sold Out'}
-          </Button>
         </div>
       </CardFooter>
     </Card>

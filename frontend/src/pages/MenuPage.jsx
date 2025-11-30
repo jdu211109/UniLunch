@@ -1,28 +1,23 @@
 // src/pages/MenuPage.jsx
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { apiClient } from '../utils/apiClient'
-import { Leaf, Flame, Plus, Edit, Trash2 } from 'lucide-react'
-import { Button, Card, Input, Label, Checkbox, Badge, Separator } from '../components/ui'
 import MealCard from '../components/meals/MealCard'
-import MealFilters from '../components/meals/MealFilters'
-import { useToast } from '../components/navigation/useToast.jsx'
+
+const CATEGORIES = [
+  { key: 'set', label: 'Сет' },
+  { key: 'main', label: 'Блюда' },
+  { key: 'salad', label: 'Салаты' },
+  { key: 'soup', label: 'Суп/Самса' },
+  { key: 'dessert', label: 'Десерты' },
+  { key: 'drink', label: 'Напиток' },
+  { key: 'extra', label: 'Дополнительно' },
+]
 
 export default function MenuPage() {
   const queryClient = useQueryClient()
-  const { toast } = useToast()
-  const [filters, setFilters] = useState({
-    vegetarian: false,
-    spicy: false,
-    favoritesOnly: false,
-    foodType: 'all',
-    includesDrinks: false,
-    priceRange: 'all',
-    sortBy: 'default',
-  })
-  const [searchQuery, setSearchQuery] = useState('')
-  //   const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
   const [quantities, setQuantities] = useState({})
+  const categoryRefs = useRef({})
 
   const { data: meals = [] } = useQuery({
     queryKey: ['meals'],
@@ -35,18 +30,6 @@ export default function MenuPage() {
     enabled: !!apiClient.getUserFavorites,
   })
 
-  const createOrderMutation = useMutation({
-    mutationFn: apiClient.createOrder,
-    onSuccess: () => {
-      toast({
-        title: 'Success',
-        description: 'Order placed successfully',
-      })
-      setQuantities({}); // Reset quantities
-      queryClient.invalidateQueries({ queryKey: ['userReservations'] })
-    },
-  })
-
   const toggleFavoriteMutation = useMutation({
     mutationFn: apiClient.toggleFavoriteMeal,
     onSuccess: () => {
@@ -54,77 +37,102 @@ export default function MenuPage() {
     },
   })
 
-  const filteredMeals = meals.filter((meal) => {
-    if (filters.vegetarian && !meal.isVegetarian) return false
-    if (filters.spicy && !meal.isSpicy) return false
-    if (filters.favoritesOnly && !favoriteMealIds.includes(meal.id)) return false
-    if (searchQuery && !meal.name.toLowerCase().includes(searchQuery.toLowerCase())) return false
-    return true
-  })
+  // Загружаем количества из корзины при загрузке
+  React.useEffect(() => {
+    const cart = apiClient.getCart()
+    const cartQuantities = {}
+    cart.forEach(item => {
+      cartQuantities[item.mealId] = item.quantity
+    })
+    setQuantities(cartQuantities)
+  }, [])
+
+  const handleIncreaseQuantity = (meal) => {
+    const newQuantity = (quantities[meal.id] || 0) + 1
+    setQuantities((prev) => ({ ...prev, [meal.id]: newQuantity }))
+    
+    // Добавляем в корзину
+    const cart = apiClient.getCart()
+    const existingItem = cart.find(item => item.mealId == meal.id)
+    if (existingItem) {
+      apiClient.updateCartItem(meal.id, newQuantity)
+    } else {
+      apiClient.addToCart(meal, 1)
+    }
+  }
+
+  const handleDecreaseQuantity = (meal) => {
+    const currentQuantity = quantities[meal.id] || 0
+    if (currentQuantity <= 0) return
+    
+    const newQuantity = currentQuantity - 1
+    setQuantities((prev) => ({ ...prev, [meal.id]: newQuantity }))
+    
+    // Обновляем корзину
+    apiClient.updateCartItem(meal.id, newQuantity)
+  }
+
+  const scrollToCategory = (categoryKey) => {
+    const element = categoryRefs.current[categoryKey]
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
+
+  const mealsByCategory = CATEGORIES.map((category) => ({
+    ...category,
+    meals: meals.filter((meal) => meal.category === category.key),
+  })).filter((cat) => cat.meals.length > 0)
 
   return (
     <div className="container mx-auto py-6 px-4">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-4">Today's Menu</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center">Меню на сегодня</h1>
 
-        <MealFilters
-          filters={filters}
-          setFilters={setFilters}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-        />
-      </div>{' '}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
-        {filteredMeals.map((meal) => (
-          <MealCard
-            key={meal.id}
-            meal={meal}
-            quantity={quantities[meal.id] || 0}
-            onIncreaseQuantity={() =>
-              setQuantities((prev) => ({
-                ...prev,
-                [meal.id]: (prev[meal.id] || 0) + 1,
-              }))
-            }
-            onDecreaseQuantity={() =>
-              setQuantities((prev) => ({
-                ...prev,
-                [meal.id]: Math.max(0, (prev[meal.id] || 0) - 1),
-              }))
-            }
-            onReserve={() => {
-              // No-op for individual reserve button in this flow, or could be "Add 1 to cart"
-              // For now, we rely on the quantity selectors and the main "Place Order" button
-              setQuantities((prev) => ({
-                ...prev,
-                [meal.id]: (prev[meal.id] || 0) + 1,
-              }))
-            }}
-            onToggleFavorite={() => toggleFavoriteMutation.mutate(meal.id)}
-            isFavorite={favoriteMealIds.includes(meal.id)}
-          />
-        ))}
+        {/* Category Navigation */}
+        <div className="flex justify-center sticky top-0 bg-background/95 backdrop-blur-sm py-4 z-10">
+          <div className="bg-muted p-1 rounded-lg flex flex-wrap gap-1">
+            {CATEGORIES.map((category) => {
+              const count = meals.filter((m) => m.category === category.key).length
+              return count > 0 ? (
+                <button
+                  key={category.key}
+                  onClick={() => scrollToCategory(category.key)}
+                  className="px-4 py-2 rounded-md text-sm font-medium transition-all text-muted-foreground hover:text-foreground hover:bg-background/50"
+                >
+                  {category.label}
+                </button>
+              ) : null
+            })}
+          </div>
+        </div>
       </div>
 
-      {/* Floating Order Button */}
-      {Object.values(quantities).some(q => q > 0) && (
-        <div className="fixed bottom-6 right-6 z-50">
-          <Button
-            size="lg"
-            className="shadow-lg"
-            onClick={() => {
-              const items = Object.entries(quantities)
-                .filter(([_, q]) => q > 0)
-                .map(([mealId, quantity]) => ({ mealId, quantity }));
-
-              createOrderMutation.mutate({ items });
-            }}
-            disabled={createOrderMutation.isPending}
+      {/* Meals by Category */}
+      <div className="space-y-12">
+        {mealsByCategory.map((category) => (
+          <div
+            key={category.key}
+            ref={(el) => (categoryRefs.current[category.key] = el)}
+            className="scroll-mt-32"
           >
-            {createOrderMutation.isPending ? 'Placing Order...' : `Place Order (${Object.values(quantities).reduce((a, b) => a + b, 0)} items)`}
-          </Button>
-        </div>
-      )}
+            <h2 className="text-2xl font-bold mb-6 text-primary">{category.label}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+              {category.meals.map((meal) => (
+                <MealCard
+                  key={meal.id}
+                  meal={meal}
+                  quantity={quantities[meal.id] || 0}
+                  onIncreaseQuantity={() => handleIncreaseQuantity(meal)}
+                  onDecreaseQuantity={() => handleDecreaseQuantity(meal)}
+                  onToggleFavorite={() => toggleFavoriteMutation.mutate(meal.id)}
+                  isFavorite={favoriteMealIds.includes(meal.id)}
+                />
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
