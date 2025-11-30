@@ -11,6 +11,10 @@ export default function MealsManager() {
         queryKey: ["meals"],
         queryFn: apiClient.listMeals
     });
+    const { data: categories = {} } = useQuery({
+        queryKey: ["meal-categories"],
+        queryFn: apiClient.getMealCategories,
+    });
     const [isAddMealOpen, setIsAddMealOpen] = useState(false);
     const [editingMeal, setEditingMeal] = useState(null);
 
@@ -112,6 +116,13 @@ export default function MealsManager() {
                                 <p className="text-xs text-muted-foreground mb-2 line-clamp-2">
                                     {meal.description}
                                 </p>
+                                <div className="flex flex-wrap gap-1 mb-2">
+                                    {meal.category && categories[meal.category] && (
+                                        <Badge variant="secondary" className="text-xs px-2 py-0">
+                                            {categories[meal.category]}
+                                        </Badge>
+                                    )}
+                                </div>
                                 <div className="flex gap-1">
                                     {meal.isVegetarian && (
                                         <Badge variant="outline" className="bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-700 text-xs px-2 py-0">

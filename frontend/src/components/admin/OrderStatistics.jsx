@@ -5,16 +5,19 @@ import { Card } from "../ui";
 import { DollarSign, ShoppingBag, CheckCircle, XCircle, TrendingUp } from "lucide-react";
 
 export default function OrderStatistics() {
-    const { data: orders = [], isLoading } = useQuery({
+    const { data, isLoading } = useQuery({
         queryKey: ["admin-orders"],
-        queryFn: apiClient.listAllReservations
+        queryFn: apiClient.listAdminOrders,
+        refetchInterval: 10000,
     });
+
+    const orders = data?.orders || [];
 
     const stats = useMemo(() => {
         const totalOrders = orders.length;
         const completedOrders = orders.filter(o => o.status === 'completed').length;
         const cancelledOrders = orders.filter(o => o.status === 'cancelled').length;
-        const pendingOrders = orders.filter(o => o.status === 'pending').length;
+        const confirmedOrders = orders.filter(o => o.status === 'confirmed').length;
 
         const totalRevenue = orders
             .filter(o => o.status !== 'cancelled')
@@ -44,28 +47,28 @@ export default function OrderStatistics() {
             totalOrders,
             completedOrders,
             cancelledOrders,
-            pendingOrders,
+            confirmedOrders,
             totalRevenue,
             popularItems
         };
     }, [orders]);
 
     if (isLoading) {
-        return <div className="p-8 text-center">Loading statistics...</div>;
+        return <div className="p-8 text-center">Загрузка статистики...</div>;
     }
 
     return (
         <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Order Statistics</h2>
+            <h2 className="text-2xl font-bold">Статистика заказов</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <Card className="p-6">
                     <div className="flex items-center gap-4">
-                        <div className="p-3 bg-green-100 rounded-full text-green-600">
+                        <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-full text-green-600 dark:text-green-400">
                             <DollarSign size={24} />
                         </div>
                         <div>
-                            <p className="text-sm text-muted-foreground">Total Revenue</p>
+                            <p className="text-sm text-muted-foreground">Общий доход</p>
                             <h3 className="text-2xl font-bold">${stats.totalRevenue.toFixed(2)}</h3>
                         </div>
                     </div>
@@ -73,11 +76,11 @@ export default function OrderStatistics() {
 
                 <Card className="p-6">
                     <div className="flex items-center gap-4">
-                        <div className="p-3 bg-blue-100 rounded-full text-blue-600">
+                        <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-full text-blue-600 dark:text-blue-400">
                             <ShoppingBag size={24} />
                         </div>
                         <div>
-                            <p className="text-sm text-muted-foreground">Total Orders</p>
+                            <p className="text-sm text-muted-foreground">Всего заказов</p>
                             <h3 className="text-2xl font-bold">{stats.totalOrders}</h3>
                         </div>
                     </div>
@@ -85,11 +88,11 @@ export default function OrderStatistics() {
 
                 <Card className="p-6">
                     <div className="flex items-center gap-4">
-                        <div className="p-3 bg-emerald-100 rounded-full text-emerald-600">
+                        <div className="p-3 bg-emerald-100 dark:bg-emerald-900/30 rounded-full text-emerald-600 dark:text-emerald-400">
                             <CheckCircle size={24} />
                         </div>
                         <div>
-                            <p className="text-sm text-muted-foreground">Completed</p>
+                            <p className="text-sm text-muted-foreground">Выполнено</p>
                             <h3 className="text-2xl font-bold">{stats.completedOrders}</h3>
                         </div>
                     </div>
@@ -97,11 +100,11 @@ export default function OrderStatistics() {
 
                 <Card className="p-6">
                     <div className="flex items-center gap-4">
-                        <div className="p-3 bg-red-100 rounded-full text-red-600">
+                        <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-full text-red-600 dark:text-red-400">
                             <XCircle size={24} />
                         </div>
                         <div>
-                            <p className="text-sm text-muted-foreground">Cancelled</p>
+                            <p className="text-sm text-muted-foreground">Отменено</p>
                             <h3 className="text-2xl font-bold">{stats.cancelledOrders}</h3>
                         </div>
                     </div>
@@ -112,7 +115,7 @@ export default function OrderStatistics() {
                 <Card className="p-6">
                     <div className="flex items-center gap-2 mb-4">
                         <TrendingUp size={20} className="text-primary" />
-                        <h3 className="text-lg font-bold">Popular Items</h3>
+                        <h3 className="text-lg font-bold">Популярные блюда</h3>
                     </div>
                     <div className="space-y-4">
                         {stats.popularItems.length > 0 ? (
@@ -120,12 +123,12 @@ export default function OrderStatistics() {
                                 <div key={index} className="flex justify-between items-center border-b pb-2 last:border-0 last:pb-0">
                                     <span className="font-medium">{item.name}</span>
                                     <span className="text-sm bg-secondary px-2 py-1 rounded-full">
-                                        {item.count} sold
+                                        {item.count} продано
                                     </span>
                                 </div>
                             ))
                         ) : (
-                            <p className="text-muted-foreground text-sm">No sales data yet.</p>
+                            <p className="text-muted-foreground text-sm">Нет данных о продажах.</p>
                         )}
                     </div>
                 </Card>
