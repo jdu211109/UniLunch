@@ -5,10 +5,12 @@ import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "../../hooks/useAuth.jsx";
 import { useToastContext } from "../../hooks/useToastContext.js";
 import { apiClient } from "../../utils/apiClient.js";
+import { useLanguage } from "../../hooks/useLanguage";
 import { Lock, Mail, Eye, EyeOff, User, Clock, CreditCard, Smartphone, CheckCircle, ArrowLeft } from "lucide-react";
 
 export default function AuthPage() {
   const auth = useAuth();
+  const { t } = useLanguage();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -33,14 +35,14 @@ export default function AuthPage() {
     },
     onSuccess: () => {
       toast({
-        title: "Успешно!",
-        description: "Вы успешно вошли в систему",
+        title: t('auth.success'),
+        description: t('auth.loginSuccess'),
       });
     },
     onError: (error) => {
       toast({
-        title: "Ошибка входа",
-        description: error instanceof Error ? error.message : "Не удалось войти в систему",
+        title: t('auth.loginError'),
+        description: error instanceof Error ? error.message : t('auth.loginFailed'),
         variant: "destructive",
       });
     },
@@ -52,14 +54,14 @@ export default function AuthPage() {
     },
     onSuccess: () => {
       toast({
-        title: "Успешно!",
-        description: "Регистрация прошла успешно",
+        title: t('auth.success'),
+        description: t('auth.registerSuccess'),
       });
     },
     onError: (error) => {
       toast({
-        title: "Ошибка регистрации",
-        description: error instanceof Error ? error.message : "Не удалось зарегистрироваться",
+        title: t('auth.registerError'),
+        description: error instanceof Error ? error.message : t('auth.registerFailed'),
         variant: "destructive",
       });
     },
@@ -76,8 +78,8 @@ export default function AuthPage() {
     } else {
       if (formData.password !== formData.password_confirmation) {
         toast({
-          title: "Ошибка",
-          description: "Пароли не совпадают",
+          title: t('auth.error'),
+          description: t('auth.passwordsNotMatch'),
           variant: "destructive",
         });
         return;
@@ -103,15 +105,15 @@ export default function AuthPage() {
     },
     onSuccess: () => {
       toast({
-        title: "Код отправлен",
-        description: `Проверочный код отправлен на ${resetEmail}`,
+        title: t('auth.codeSent'),
+        description: `${t('auth.codeSentTo')} ${resetEmail}`,
       });
       setForgotPasswordStep('code');
     },
     onError: (error) => {
       toast({
-        title: "Ошибка",
-        description: error instanceof Error ? error.message : "Не удалось отправить код",
+        title: t('auth.error'),
+        description: error instanceof Error ? error.message : t('auth.failedToSendCode'),
         variant: "destructive",
       });
     },
@@ -123,15 +125,15 @@ export default function AuthPage() {
     },
     onSuccess: () => {
       toast({
-        title: "Успешно!",
-        description: "Код подтвержден",
+        title: t('auth.success'),
+        description: t('auth.codeVerified'),
       });
       setForgotPasswordStep('reset');
     },
     onError: (error) => {
       toast({
-        title: "Ошибка",
-        description: error instanceof Error ? error.message : "Неверный код",
+        title: t('auth.error'),
+        description: error instanceof Error ? error.message : t('auth.invalidCode'),
         variant: "destructive",
       });
     },
@@ -143,8 +145,8 @@ export default function AuthPage() {
     },
     onSuccess: () => {
       toast({
-        title: "Успешно!",
-        description: "Пароль успешно изменен",
+        title: t('auth.success'),
+        description: t('auth.passwordChanged'),
       });
       setForgotPasswordStep(null);
       setResetEmail("");
@@ -153,8 +155,8 @@ export default function AuthPage() {
     },
     onError: (error) => {
       toast({
-        title: "Ошибка",
-        description: error instanceof Error ? error.message : "Не удалось сбросить пароль",
+        title: t('auth.error'),
+        description: error instanceof Error ? error.message : t('auth.failedToResetPassword'),
         variant: "destructive",
       });
     },
@@ -168,8 +170,8 @@ export default function AuthPage() {
     e.preventDefault();
     if (!resetEmail) {
       toast({
-        title: "Ошибка",
-        description: "Введите email",
+        title: t('auth.error'),
+        description: t('auth.enterEmail'),
         variant: "destructive",
       });
       return;
@@ -204,8 +206,8 @@ export default function AuthPage() {
     const code = verificationCode.join('');
     if (code.length !== 6) {
       toast({
-        title: "Ошибка",
-        description: "Введите 6-значный код",
+        title: t('auth.error'),
+        description: t('auth.enter6DigitCode'),
         variant: "destructive",
       });
       return;
@@ -217,8 +219,8 @@ export default function AuthPage() {
     e.preventDefault();
     if (resetPasswordData.password !== resetPasswordData.password_confirmation) {
       toast({
-        title: "Ошибка",
-        description: "Пароли не совпадают",
+        title: t('auth.error'),
+        description: t('auth.passwordsNotMatch'),
         variant: "destructive",
       });
       return;
@@ -248,23 +250,23 @@ export default function AuthPage() {
   const benefits = [
     {
       icon: Clock,
-      title: "Заказ без очередей",
-      description: "Экономьте время - заказывайте заранее"
+      title: t('auth.benefit1Title'),
+      description: t('auth.benefit1Desc')
     },
     {
       icon: Smartphone,
-      title: "Онлайн бронирование",
-      description: "Бронируйте обед в пару кликов"
+      title: t('auth.benefit2Title'),
+      description: t('auth.benefit2Desc')
     },
     {
       icon: CreditCard,
-      title: "Удобная оплата",
-      description: "Оплачивайте онлайн безопасно"
+      title: t('auth.benefit3Title'),
+      description: t('auth.benefit3Desc')
     },
     {
       icon: CheckCircle,
-      title: "Гарантия качества",
-      description: "Свежие блюда каждый день"
+      title: t('auth.benefit4Title'),
+      description: t('auth.benefit4Desc')
     }
   ];
 
@@ -279,7 +281,7 @@ export default function AuthPage() {
               UniLunch
             </h1>
             <p className="text-xl xl:text-2xl text-white/90 font-light">
-              Ваш умный помощник для заказа обедов
+              {t('auth.slogan')}
             </p>
           </div>
 
@@ -313,7 +315,7 @@ export default function AuthPage() {
             <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent mb-2">
               UniLunch
             </h1>
-            <p className="text-gray-600">Ваш умный помощник для заказа обедов</p>
+            <p className="text-gray-600">{t('auth.slogan')}</p>
           </div>
 
           <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/20">
@@ -325,14 +327,14 @@ export default function AuthPage() {
                   className="flex items-center gap-2 text-white/80 hover:text-white mb-6 transition-colors"
                 >
                   <ArrowLeft className="h-4 w-4" />
-                  Назад
+                  {t('common.back')}
                 </button>
                 <div className="text-center mb-8">
                   <h2 className="text-3xl font-bold text-white mb-2">
-                    Забыли пароль?
+                    {t('auth.forgotPasswordTitle')}
                   </h2>
                   <p className="text-white/80">
-                    Введите ваш email для получения кода восстановления
+                    {t('auth.enterEmailForCode')}
                   </p>
                 </div>
 
@@ -357,7 +359,7 @@ export default function AuthPage() {
                     className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={sendCodeMutation.isPending}
                   >
-                    {sendCodeMutation.isPending ? "Отправка..." : "Отправить код"}
+                    {sendCodeMutation.isPending ? t('auth.sending') : t('auth.sendCode')}
                   </button>
                 </form>
               </>
@@ -371,14 +373,14 @@ export default function AuthPage() {
                   className="flex items-center gap-2 text-white/80 hover:text-white mb-6 transition-colors"
                 >
                   <ArrowLeft className="h-4 w-4" />
-                  Назад
+                  {t('common.back')}
                 </button>
                 <div className="text-center mb-8">
                   <h2 className="text-3xl font-bold text-white mb-2">
-                    Введите код
+                    {t('auth.enterCode')}
                   </h2>
                   <p className="text-white/80">
-                    Мы отправили 6-значный код на<br />
+                    {t('auth.codeSentTo')}<br />
                     <span className="font-semibold text-orange-400">{resetEmail}</span>
                   </p>
                 </div>
@@ -406,7 +408,7 @@ export default function AuthPage() {
                     className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={verifyCodeMutation.isPending}
                   >
-                    {verifyCodeMutation.isPending ? "Проверка..." : "Подтвердить"}
+                    {verifyCodeMutation.isPending ? t('auth.verifying') : t('auth.verify')}
                   </button>
 
                   <button
@@ -415,7 +417,7 @@ export default function AuthPage() {
                     className="w-full text-white/80 hover:text-white text-sm transition-colors"
                     disabled={sendCodeMutation.isPending}
                   >
-                    Отправить код повторно
+                    {t('auth.resendCode')}
                   </button>
                 </form>
               </>
@@ -429,14 +431,14 @@ export default function AuthPage() {
                   className="flex items-center gap-2 text-white/80 hover:text-white mb-6 transition-colors"
                 >
                   <ArrowLeft className="h-4 w-4" />
-                  Назад к входу
+                  {t('auth.backToLogin')}
                 </button>
                 <div className="text-center mb-8">
                   <h2 className="text-3xl font-bold text-white mb-2">
-                    Новый пароль
+                    {t('auth.newPassword')}
                   </h2>
                   <p className="text-white/80">
-                    Введите новый пароль для вашего аккаунта
+                    {t('auth.enterEmailForCode')}
                   </p>
                 </div>
 
@@ -449,7 +451,7 @@ export default function AuthPage() {
                       type={showPassword ? "text" : "password"}
                       value={resetPasswordData.password}
                       onChange={(e) => setResetPasswordData(prev => ({ ...prev, password: e.target.value }))}
-                      placeholder="Новый пароль"
+                      placeholder={t('auth.newPasswordPlaceholder')}
                       className="w-full pl-12 pr-12 py-3 bg-white/20 border-2 border-white/30 text-white placeholder-white/50 rounded-xl focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500/50 focus:bg-white/30 outline-none transition-all"
                       required
                       minLength={6}
@@ -475,7 +477,7 @@ export default function AuthPage() {
                       type={showConfirmPassword ? "text" : "password"}
                       value={resetPasswordData.password_confirmation}
                       onChange={(e) => setResetPasswordData(prev => ({ ...prev, password_confirmation: e.target.value }))}
-                      placeholder="Подтвердите пароль"
+                      placeholder={t('auth.confirmPassword')}
                       className="w-full pl-12 pr-12 py-3 bg-white/20 border-2 border-white/30 text-white placeholder-white/50 rounded-xl focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500/50 focus:bg-white/30 outline-none transition-all"
                       required
                       minLength={6}
@@ -498,7 +500,7 @@ export default function AuthPage() {
                     className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={resetPasswordMutation.isPending}
                   >
-                    {resetPasswordMutation.isPending ? "Сохранение..." : "Сбросить пароль"}
+                    {resetPasswordMutation.isPending ? t('auth.savingPassword') : t('auth.resetPassword')}
                   </button>
                 </form>
               </>
@@ -509,10 +511,10 @@ export default function AuthPage() {
               <>
                 <div className="text-center mb-8">
                   <h2 className="text-3xl font-bold text-white mb-2">
-                    {isLogin ? "С возвращением!" : "Создать аккаунт"}
+                    {isLogin ? t('auth.welcomeBack') : t('auth.createAccount')}
                   </h2>
                   <p className="text-white/80">
-                    {isLogin ? "Войдите в свой аккаунт" : "Заполните форму для регистрации"}
+                    {isLogin ? t('auth.loginToAccount') : t('auth.fillFormToRegister')}
                   </p>
                 </div>
 
@@ -528,7 +530,7 @@ export default function AuthPage() {
                           name="name"
                           value={formData.name}
                           onChange={handleChange}
-                          placeholder="Полное имя"
+                          placeholder={t('auth.fullName')}
                           className="w-full pl-12 pr-4 py-3 bg-white/20 border-2 border-white/30 text-white placeholder-white/50 rounded-xl focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500/50 focus:bg-white/30 outline-none transition-all"
                           required
                         />
@@ -559,7 +561,7 @@ export default function AuthPage() {
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
-                        placeholder="Пароль"
+                        placeholder={t('auth.password')}
                         className="w-full pl-12 pr-12 py-3 bg-white/20 border-2 border-white/30 text-white placeholder-white/50 rounded-xl focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500/50 focus:bg-white/30 outline-none transition-all"
                         required
                         minLength={6}
@@ -587,7 +589,7 @@ export default function AuthPage() {
                           name="password_confirmation"
                           value={formData.password_confirmation}
                           onChange={handleChange}
-                          placeholder="Подтвердите пароль"
+                          placeholder={t('auth.confirmPassword')}
                           className="w-full pl-12 pr-12 py-3 bg-white/20 border-2 border-white/30 text-white placeholder-white/50 rounded-xl focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500/50 focus:bg-white/30 outline-none transition-all"
                           required
                           minLength={6}
@@ -614,7 +616,7 @@ export default function AuthPage() {
                         onClick={handleForgotPassword}
                         className="text-sm font-medium text-white/80 hover:text-white transition-colors"
                       >
-                        Забыли пароль?
+                        {t('auth.forgotPassword')}
                       </button>
                     </div>
                   )}
@@ -625,8 +627,8 @@ export default function AuthPage() {
                     disabled={isLoading}
                   >
                     {isLoading
-                      ? "Обработка..."
-                      : isLogin ? "Войти" : "Зарегистрироваться"}
+                      ? t('auth.processing')
+                      : isLogin ? t('auth.login') : t('auth.register')}
                   </button>
                 </form>
 
@@ -636,9 +638,9 @@ export default function AuthPage() {
                     className="text-white/80 hover:text-white font-medium transition-colors"
                   >
                     {isLogin ? (
-                      <>Нет аккаунта? <span className="text-orange-400 hover:text-orange-300 font-semibold">Зарегистрироваться</span></>
+                      <>{t('auth.noAccount')} <span className="text-orange-400 hover:text-orange-300 font-semibold">{t('auth.register')}</span></>
                     ) : (
-                      <>Уже есть аккаунт? <span className="text-orange-400 hover:text-orange-300 font-semibold">Войти</span></>
+                      <>{t('auth.hasAccount')} <span className="text-orange-400 hover:text-orange-300 font-semibold">{t('auth.login')}</span></>
                     )}
                   </button>
                 </div>
@@ -648,9 +650,9 @@ export default function AuthPage() {
 
           {!forgotPasswordStep && (
             <p className="text-center text-white/70 text-sm mt-6">
-              Продолжая, вы соглашаетесь с нашими{" "}
+              {t('auth.termsAgreement')}{" "}
               <a href="#terms" className="text-orange-400 hover:text-orange-300 font-medium transition-colors">
-                Правилами использования
+                {t('auth.termsOfUse')}
               </a>
             </p>
           )}

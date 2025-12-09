@@ -14,6 +14,7 @@ import {
     Checkbox,
 } from "../ui";
 import { Loader2 } from "lucide-react";
+import { useLanguage } from "../../hooks/useLanguage";
 
 export default function MenuFormDialog({
     isOpen,
@@ -22,6 +23,7 @@ export default function MenuFormDialog({
     isLoading,
     initialData,
 }) {
+    const { t } = useLanguage();
     const { register, handleSubmit, reset, setValue, watch } = useForm({
         defaultValues: {
             name: "",
@@ -93,33 +95,33 @@ export default function MenuFormDialog({
             <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>
-                        {initialData ? "Edit Menu" : "Create New Menu"}
+                        {initialData ? t('menuForm.editMenu') : t('menuForm.createMenu')}
                     </DialogTitle>
                 </DialogHeader>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                     <div className="space-y-4">
                         <div className="space-y-2">
-                            <Label htmlFor="name">Menu Name</Label>
+                            <Label htmlFor="name">{t('menuForm.menuName')}</Label>
                             <Input
                                 id="name"
-                                placeholder="e.g., Lunch Special"
+                                placeholder={t('menuForm.menuNamePlaceholder')}
                                 {...register("name", { required: true })}
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="description">Description</Label>
+                            <Label htmlFor="description">{t('menuForm.description')}</Label>
                             <Input
                                 id="description"
-                                placeholder="e.g., Available Mon-Fri"
+                                placeholder={t('menuForm.descriptionPlaceholder')}
                                 {...register("description")}
                             />
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <Label htmlFor="price">Price ($)</Label>
+                                <Label htmlFor="price">{t('menuForm.price')}</Label>
                                 <Input
                                     id="price"
                                     type="number"
@@ -129,7 +131,7 @@ export default function MenuFormDialog({
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="date">Date</Label>
+                                <Label htmlFor="date">{t('menuForm.date')}</Label>
                                 <Input
                                     id="date"
                                     type="date"
@@ -139,7 +141,7 @@ export default function MenuFormDialog({
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="image">Menu Image</Label>
+                            <Label htmlFor="image">{t('menuForm.menuImage')}</Label>
                             <div className="flex flex-col gap-4">
                                 <Input
                                     id="image"
@@ -161,7 +163,7 @@ export default function MenuFormDialog({
                                             className="absolute top-2 right-2"
                                             onClick={() => setValue("imageUrl", "")}
                                         >
-                                            Remove
+                                            {t('menuForm.remove')}
                                         </Button>
                                     </div>
                                 )}
@@ -169,11 +171,11 @@ export default function MenuFormDialog({
                         </div>
 
                         <div className="space-y-2">
-                            <Label>Select Meals</Label>
+                            <Label>{t('menuForm.selectMeals')}</Label>
                             <div className="border rounded-md p-4 space-y-3 max-h-60 overflow-y-auto">
                                 {meals.length === 0 ? (
                                     <p className="text-sm text-muted-foreground text-center py-2">
-                                        No meals available. Create meals first.
+                                        {t('menuForm.noMeals')}
                                     </p>
                                 ) : (
                                     meals.map((meal) => (
@@ -202,7 +204,7 @@ export default function MenuFormDialog({
                                 )}
                             </div>
                             <p className="text-xs text-muted-foreground">
-                                Selected: {(selectedMealIds || []).length} meals
+                                {t('menuForm.selected')}: {(selectedMealIds || []).length} {t('admin.meals').toLowerCase()}
                             </p>
                         </div>
 
@@ -212,17 +214,17 @@ export default function MenuFormDialog({
                                 checked={watch("isActive")}
                                 onCheckedChange={(checked) => setValue("isActive", checked)}
                             />
-                            <Label htmlFor="isActive">Active Menu</Label>
+                            <Label htmlFor="isActive">{t('menuForm.activeMenu')}</Label>
                         </div>
                     </div>
 
                     <DialogFooter>
                         <Button type="button" variant="outline" onClick={onClose}>
-                            Cancel
+                            {t('menuForm.cancel')}
                         </Button>
                         <Button type="submit" disabled={isLoading}>
                             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                            {initialData ? "Update Menu" : "Create Menu"}
+                            {initialData ? t('menuForm.update') : t('menuForm.create')}
                         </Button>
                     </DialogFooter>
                 </form>

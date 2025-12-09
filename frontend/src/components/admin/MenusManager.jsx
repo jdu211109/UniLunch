@@ -4,9 +4,11 @@ import { apiClient } from "../../utils/apiClient";
 import { Plus, Edit, Trash2, Calendar, Utensils } from "lucide-react";
 import { Button, Card, Badge, AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "../ui";
 import MenuFormDialog from "./MenuFormDialog";
+import { useLanguage } from "../../hooks/useLanguage";
 
 export default function MenusManager() {
     const queryClient = useQueryClient();
+    const { t } = useLanguage();
     const { data: menus = [] } = useQuery({
         queryKey: ["menus"],
         queryFn: apiClient.listMenus
@@ -40,10 +42,10 @@ export default function MenusManager() {
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold">Menus</h2>
+                <h2 className="text-2xl font-bold">{t('menusManager.title')}</h2>
                 <Button onClick={() => setIsAddMenuOpen(true)}>
                     <Plus size={16} className="mr-2" />
-                    Create Menu
+                    {t('menusManager.createMenu')}
                 </Button>
             </div>
 
@@ -60,7 +62,7 @@ export default function MenusManager() {
                                 variant={menu.isActive ? "default" : "secondary"}
                                 className="absolute top-2 right-2"
                             >
-                                {menu.isActive ? "Active" : "Inactive"}
+                                {menu.isActive ? t('menusManager.active') : t('menusManager.inactive')}
                             </Badge>
                         </div>
 
@@ -85,7 +87,7 @@ export default function MenusManager() {
                             <div className="mb-6">
                                 <div className="flex items-center text-sm font-medium mb-2">
                                     <Utensils size={14} className="mr-2" />
-                                    Included Meals ({menu.meals?.length || 0})
+                                    {t('menusManager.includedMeals')} ({menu.meals?.length || 0})
                                 </div>
                                 <div className="flex flex-wrap gap-1">
                                     {menu.meals?.slice(0, 3).map((meal) => (
@@ -95,7 +97,7 @@ export default function MenusManager() {
                                     ))}
                                     {(menu.meals?.length || 0) > 3 && (
                                         <Badge variant="outline" className="text-xs">
-                                            +{menu.meals.length - 3} more
+                                            +{menu.meals.length - 3} {t('menusManager.more')}
                                         </Badge>
                                     )}
                                 </div>
@@ -109,29 +111,33 @@ export default function MenusManager() {
                                 onClick={() => setEditingMenu(menu)}
                             >
                                 <Edit size={16} className="mr-2" />
-                                Edit
+                                {t('common.edit')}
                             </Button>
                             <AlertDialog>
                                 <AlertDialogTrigger asChild>
-                                    <Button variant="outline" size="sm" className="text-destructive hover:bg-destructive/10">
+                                    <Button variant="outline" size="sm" className="text-destructive hover:text-destructive hover:bg-destructive/10">
                                         <Trash2 size={16} className="mr-2" />
-                                        Delete
+                                        {t('common.delete')}
                                     </Button>
                                 </AlertDialogTrigger>
                                 <AlertDialogContent>
                                     <AlertDialogHeader>
-                                        <AlertDialogTitle>Delete Menu</AlertDialogTitle>
-                                        <AlertDialogDescription>
-                                            Are you sure you want to delete "{menu.name}"?
+                                        <div className="flex items-center gap-3 mb-2">
+                                            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10">
+                                                <Trash2 className="h-6 w-6 text-destructive" />
+                                            </div>
+                                            <AlertDialogTitle className="text-xl">{t('menusManager.deleteMenu')}</AlertDialogTitle>
+                                        </div>
+                                        <AlertDialogDescription className="text-base">
+                                            {t('menusManager.deleteConfirmation')} <span className="font-semibold text-foreground">"{menu.name}"</span>?
                                         </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
-                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                        <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
                                         <AlertDialogAction
                                             onClick={() => deleteMenuMutation.mutate({ id: menu.id })}
-                                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                                         >
-                                            Delete
+                                            {t('common.delete')}
                                         </AlertDialogAction>
                                     </AlertDialogFooter>
                                 </AlertDialogContent>

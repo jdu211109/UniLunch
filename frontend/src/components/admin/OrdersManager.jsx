@@ -3,9 +3,11 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "../../utils/apiClient";
 import { CheckCircle, XCircle, Clock, Search, CreditCard, Banknote, Bell, Timer } from "lucide-react";
 import { Button, Card, Badge, Input } from "../ui";
+import { useLanguage } from "../../hooks/useLanguage";
 
 export default function OrdersManager() {
     const queryClient = useQueryClient();
+    const { t, language } = useLanguage();
     const [searchTerm, setSearchTerm] = useState("");
     const [countdown, setCountdown] = useState(null);
 
@@ -46,30 +48,48 @@ export default function OrdersManager() {
     const getStatusBadge = (status) => {
         switch (status) {
             case "completed":
-                return <Badge className="!bg-green-600 hover:!bg-green-700 !text-white border-transparent">Выполнен</Badge>;
+                return <Badge className="!bg-green-600 hover:!bg-green-700 !text-white border-transparent">{t('ordersManager.completed')}</Badge>;
             case "cancelled":
-                return <Badge variant="destructive">Отменён</Badge>;
+                return <Badge variant="destructive">{t('ordersManager.cancelled')}</Badge>;
             case "confirmed":
-                return <Badge className="bg-blue-500 text-white">Подтверждён</Badge>;
+                return <Badge className="bg-yellow-500 text-white">{t('ordersManager.confirmed')}</Badge>;
             default:
-                return <Badge variant="secondary" className="bg-yellow-500 text-white">В ожидании</Badge>;
+                return <Badge variant="secondary" className="bg-yellow-500 text-white">{t('ordersManager.pending')}</Badge>;
+        }
+    };
+
+    const getPendingOrdersText = (count) => {
+        if (language === 'ru') {
+            if (count === 1) return t('ordersManager.newOrder');
+            if (count >= 2 && count <= 4) return t('ordersManager.newOrders');
+            return t('ordersManager.newOrdersMany');
+        }
+        return count === 1 ? t('ordersManager.newOrder') : t('ordersManager.newOrders');
+    };
+
+    const getLocaleForLanguage = () => {
+        switch (language) {
+            case 'en': return 'en-US';
+            case 'uz': return 'uz-UZ';
+            case 'ja': return 'ja-JP';
+            default: return 'ru-RU';
         }
     };
 
     if (isLoading) {
-        return <div className="p-8 text-center">Загрузка заказов...</div>;
+        return <div className="p-8 text-center">{t('ordersManager.loadingOrders')}</div>;
     }
 
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <div className="flex items-center gap-4">
-                    <h2 className="text-2xl font-bold">Управление заказами</h2>
+                    <h2 className="text-2xl font-bold">{t('ordersManager.title')}</h2>
                     {pendingCount > 0 && (
                         <div className="flex items-center gap-2 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200 px-3 py-1.5 rounded-full animate-pulse">
                             <Bell size={16} />
                             <span className="text-sm font-medium">
-                                {pendingCount} {pendingCount === 1 ? 'новый заказ' : pendingCount < 5 ? 'новых заказа' : 'новых заказов'} ожидает
+                                {pendingCount} {getPendingOrdersText(pendingCount)} {t('ordersManager.waiting')}
                             </span>
                         </div>
                     )}
@@ -77,7 +97,7 @@ export default function OrdersManager() {
                 <div className="relative w-64">
                     <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
-                        placeholder="Поиск заказов..."
+                        placeholder={t('ordersManager.searchOrders')}
                         className="pl-8"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
@@ -88,7 +108,7 @@ export default function OrdersManager() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {filteredOrders.length === 0 ? (
                     <Card className="p-8 text-center text-muted-foreground col-span-full">
-                        Заказов пока нет.
+                        {t('ordersManager.noOrders')}
                     </Card>
                 ) : (
                     filteredOrders.map((order) => (
@@ -96,7 +116,7 @@ export default function OrdersManager() {
                             key={order.id}
                             className={`p-4 flex flex-col h-full ${order.status === 'completed' ? 'bg-green-50 dark:bg-green-900/10 border-green-200' :
                                 order.status === 'cancelled' ? 'bg-red-50 dark:bg-red-900/10 border-red-200' :
-                                    'bg-blue-50 dark:bg-blue-900/10 border-blue-200'
+                                    'bg-yellow-50 dark:bg-yellow-900/10 border-yellow-200'
                                 }`}
                         >
                             <div className="flex flex-col justify-between h-full gap-3">
@@ -107,7 +127,7 @@ export default function OrdersManager() {
                                     </div>
 
                                     <div className="text-sm text-muted-foreground mb-2">
-                                        Клиент: <span className="font-medium text-foreground">{order.userName}</span>
+                                        {t('ordersManager.client')}: <span className="font-medium text-foreground">{order.userName}</span>
                                     </div>
 
                                     <div className="space-y-1 mb-3">
@@ -126,10 +146,10 @@ export default function OrdersManager() {
                                         </span>
                                         <span className="flex items-center gap-1">
                                             {order.paymentMethod === "card" ? <CreditCard size={12} /> : <Banknote size={12} />}
-                                            {order.paymentMethod === "card" ? "Карта" : "Наличные"}
+                                            {order.paymentMethod === "card" ? t('reservations.card') : t('reservations.cash')}
                                         </span>
                                         <span>
-                                            {new Date(order.createdAt).toLocaleString("ru-RU", {
+                                            {new Date(order.createdAt).toLocaleString(getLocaleForLanguage(), {
                                                 day: "numeric",
                                                 month: "short",
                                                 hour: "2-digit",
@@ -149,7 +169,7 @@ export default function OrdersManager() {
                                                 onClick={() => updateStatusMutation.mutate({ id: order.id, status: 'completed' })}
                                             >
                                                 <CheckCircle size={16} className="mr-1" />
-                                                Выполнен
+                                                {t('ordersManager.complete')}
                                             </Button>
                                             <Button
                                                 size="sm"
@@ -158,7 +178,7 @@ export default function OrdersManager() {
                                                 onClick={() => updateStatusMutation.mutate({ id: order.id, status: 'cancelled' })}
                                             >
                                                 <XCircle size={16} className="mr-1" />
-                                                Отмена
+                                                {t('common.cancel')}
                                             </Button>
                                         </div>
                                     )}

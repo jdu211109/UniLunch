@@ -1,7 +1,8 @@
 // src/components/meals/MealFilters.jsx
 import React from "react";
-import { Leaf, Flame, X } from "lucide-react";
+import { Leaf, Flame, X, Star } from "lucide-react";
 import { Button, Checkbox, Label, Badge, Input } from "../ui";
+import { useLanguage } from "../../hooks/useLanguage";
 
 export default function MealFilters({
   filters,
@@ -10,14 +11,16 @@ export default function MealFilters({
   setSearchQuery,
   isFilterMenuOpen,
   setIsFilterMenuOpen,
-//   favoriteMealIds
+  //   favoriteMealIds
 }) {
+  const { t } = useLanguage();
+
   return (
     <>
       <div className="flex flex-col sm:flex-row gap-4 mb-4">
         <div className="flex-1 hidden">
           <Input
-            placeholder="Filter..."
+            placeholder={t('common.search')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full"
@@ -42,7 +45,7 @@ export default function MealFilters({
                 clipRule="evenodd"
               ></path>
             </svg>
-            Filters
+            {t('filters.title')}
           </Button>
         </div>
       </div>
@@ -53,7 +56,7 @@ export default function MealFilters({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Dietary Preferences */}
             <div className="space-y-3">
-              <h3 className="font-medium">Dietary Preferences</h3>
+              <h3 className="font-medium">{t('filters.dietaryPreferences')}</h3>
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="vegetarian"
@@ -64,7 +67,7 @@ export default function MealFilters({
                 />
                 <Label htmlFor="vegetarian" className="flex items-center gap-1">
                   <Leaf size={16} className="text-green-500" />
-                  Vegetarian
+                  {t('filters.vegetarian')}
                 </Label>
               </div>
               <div className="flex items-center gap-2">
@@ -77,7 +80,7 @@ export default function MealFilters({
                 />
                 <Label htmlFor="spicy" className="flex items-center gap-1">
                   <Flame size={16} className="text-red-500" />
-                  Spicy
+                  {t('filters.spicy')}
                 </Label>
               </div>
               <div className="flex items-center gap-2">
@@ -90,16 +93,16 @@ export default function MealFilters({
                 />
                 <Label htmlFor="favoritesOnly" className="flex items-center gap-1">
                   <Star size={16} className="text-yellow-500" />
-                  Favorites Only
+                  {t('filters.favoritesOnly')}
                 </Label>
               </div>
             </div>
 
             {/* Food type filters */}
             <div className="space-y-3">
-              <h3 className="font-medium">Food Types</h3>
+              <h3 className="font-medium">{t('filters.foodTypes')}</h3>
               <div className="space-y-2">
-                <Label htmlFor="foodType">Food Consistency</Label>
+                <Label htmlFor="foodType">{t('filters.foodConsistency')}</Label>
                 <select
                   id="foodType"
                   value={filters.foodType}
@@ -108,13 +111,13 @@ export default function MealFilters({
                   }
                   className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                 >
-                  <option value="all">All Foods</option>
-                  <option value="dry">Dry Food</option>
-                  <option value="liquid">Liquid Food (Soups, Curries)</option>
+                  <option value="all">{t('filters.allFoods')}</option>
+                  <option value="dry">{t('filters.dryFood')}</option>
+                  <option value="liquid">{t('filters.liquidFood')}</option>
                 </select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="includesDrinks">Includes Drinks</Label>
+                <Label htmlFor="includesDrinks">{t('filters.includesDrinks')}</Label>
                 <Checkbox
                   id="includesDrinks"
                   checked={filters.includesDrinks}
@@ -127,9 +130,9 @@ export default function MealFilters({
 
             {/* Price and sort filters */}
             <div className="space-y-3">
-              <h3 className="font-medium">Price & Sorting</h3>
+              <h3 className="font-medium">{t('filters.priceSorting')}</h3>
               <div className="space-y-2">
-                <Label htmlFor="priceRange">Price Range</Label>
+                <Label htmlFor="priceRange">{t('filters.priceRange')}</Label>
                 <select
                   id="priceRange"
                   value={filters.priceRange}
@@ -138,14 +141,14 @@ export default function MealFilters({
                   }
                   className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                 >
-                  <option value="all">All Prices</option>
-                  <option value="budget">Budget (Under $10)</option>
-                  <option value="mid">Mid-Range ($10-$15)</option>
-                  <option value="premium">Premium ($15+)</option>
+                  <option value="all">{t('filters.allPrices')}</option>
+                  <option value="budget">{t('filters.budget')}</option>
+                  <option value="mid">{t('filters.midRange')}</option>
+                  <option value="premium">{t('filters.premium')}</option>
                 </select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="sortBy">Sort By</Label>
+                <Label htmlFor="sortBy">{t('filters.sortBy')}</Label>
                 <select
                   id="sortBy"
                   value={filters.sortBy}
@@ -154,10 +157,10 @@ export default function MealFilters({
                   }
                   className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                 >
-                  <option value="default">Default</option>
-                  <option value="priceAsc">Price: Low to High</option>
-                  <option value="priceDesc">Price: High to Low</option>
-                  <option value="rating">Highest Rated</option>
+                  <option value="default">{t('filters.default')}</option>
+                  <option value="priceAsc">{t('filters.priceLowHigh')}</option>
+                  <option value="priceDesc">{t('filters.priceHighLow')}</option>
+                  <option value="rating">{t('filters.highestRated')}</option>
                 </select>
               </div>
             </div>
@@ -179,9 +182,9 @@ export default function MealFilters({
                 })
               }
             >
-              Reset Filters
+              {t('filters.resetFilters')}
             </Button>
-            <Button onClick={() => setIsFilterMenuOpen(false)}>Apply</Button>
+            <Button onClick={() => setIsFilterMenuOpen(false)}>{t('filters.apply')}</Button>
           </div>
         </div>
       )}
@@ -191,7 +194,7 @@ export default function MealFilters({
         {filters.vegetarian && (
           <Badge variant="secondary" className="flex items-center gap-1">
             <Leaf size={14} className="text-green-500" />
-            Vegetarian
+            {t('filters.vegetarian')}
             <Button
               variant="ghost"
               size="icon"
@@ -205,7 +208,7 @@ export default function MealFilters({
         {filters.spicy && (
           <Badge variant="secondary" className="flex items-center gap-1">
             <Flame size={14} className="text-red-500" />
-            Spicy
+            {t('filters.spicy')}
             <Button
               variant="ghost"
               size="icon"
@@ -219,7 +222,7 @@ export default function MealFilters({
         {filters.favoritesOnly && (
           <Badge variant="secondary" className="flex items-center gap-1">
             <Star size={14} className="text-yellow-500" />
-            Favorites Only
+            {t('filters.favoritesOnly')}
             <Button
               variant="ghost"
               size="icon"
@@ -232,7 +235,7 @@ export default function MealFilters({
         )}
         {filters.foodType !== "all" && (
           <Badge variant="secondary" className="flex items-center gap-1">
-            Food Type: {filters.foodType}
+            {t('filters.foodType')}: {filters.foodType}
             <Button
               variant="ghost"
               size="icon"
@@ -245,7 +248,7 @@ export default function MealFilters({
         )}
         {filters.priceRange !== "all" && (
           <Badge variant="secondary" className="flex items-center gap-1">
-            Price Range: {filters.priceRange}
+            {t('filters.priceRange')}: {filters.priceRange}
             <Button
               variant="ghost"
               size="icon"
@@ -258,7 +261,7 @@ export default function MealFilters({
         )}
         {filters.sortBy !== "default" && (
           <Badge variant="secondary" className="flex items-center gap-1">
-            Sort By: {filters.sortBy}
+            {t('filters.sortBy')}: {filters.sortBy}
             <Button
               variant="ghost"
               size="icon"
