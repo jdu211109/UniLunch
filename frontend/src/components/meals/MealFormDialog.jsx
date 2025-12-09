@@ -1,16 +1,40 @@
 import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '../ui';
 import { Input, Label, Textarea, Checkbox, Button } from '../ui';
+import { useQuery } from '@tanstack/react-query';
+import { apiClient } from '../../utils/apiClient';
 
-export default function MealFormDialog({ isOpen, onClose, onSubmit, initialData }) {
+export default function MealFormDialog({ isOpen, onClose, onSubmit, initialData, isLoading }) {
   const [formData, setFormData] = React.useState(initialData || {
     name: '',
     description: '',
     price: 0,
     imageUrl: '',
+    category: 'main',
     isVegetarian: false,
     isSpicy: false
   });
+
+  const { data: categories = {} } = useQuery({
+    queryKey: ['meal-categories'],
+    queryFn: apiClient.getMealCategories,
+  });
+
+  React.useEffect(() => {
+    if (isOpen && initialData) {
+      setFormData(initialData);
+    } else if (isOpen && !initialData) {
+      setFormData({
+        name: '',
+        description: '',
+        price: 0,
+        imageUrl: '',
+        category: 'main',
+        isVegetarian: false,
+        isSpicy: false
+      });
+    }
+  }, [isOpen, initialData]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -60,6 +84,18 @@ export default function MealFormDialog({ isOpen, onClose, onSubmit, initialData 
               />
             </div>
             <div className="space-y-2">
+              <Label>Категория блюда</Label>
+              <select
+                className="w-full px-3 py-2 border rounded-md bg-background"
+                value={formData.category}
+                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+              >
+                {Object.entries(categories).map(([key, value]) => (
+                  <option key={key} value={key}>{value}</option>
+                ))}
+              </select>
+            </div>
+            <div className="space-y-2">
               <Label>Meal Image</Label>
               <div className="flex flex-col gap-4">
                 <Input
@@ -88,15 +124,29 @@ export default function MealFormDialog({ isOpen, onClose, onSubmit, initialData 
               </div>
             </div>
             <div className="flex gap-4">
-              <Checkbox
-                checked={formData.isVegetarian}
-                onCheckedChange={(val) => setFormData({ ...formData, isVegetarian: val })}
-              />
-              <Label>Vegetarian</Label>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  checked={formData.isVegetarian}
+                  onCheckedChange={(val) => setFormData({ ...formData, isVegetarian: val })}
+                />
+                <Label>Вегетарианское</Label>
+              </div>
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  checked={formData.isSpicy}
+                  onCheckedChange={(val) => setFormData({ ...formData, isSpicy: val })}
+                />
+                <Label>Острое</Label>
+              </div>
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">Save</Button>
+            <Button type="button" variant="outline" onClick={onClose}>
+              Отмена
+            </Button>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? 'Сохранение...' : 'Сохранить'}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

@@ -32,6 +32,7 @@ import {
 
 export default function Navigation({ searchQuery = "", setSearchQuery = () => { } }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [cartItemsCount, setCartItemsCount] = useState(0);
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('theme') || 'light';
@@ -44,6 +45,28 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => { 
   const navigate = useNavigate();
   const location = useLocation();
   const isMenuPage = location.pathname === "/menu";
+
+  // Загружаем количество товаров в корзине и слушаем изменения
+  useEffect(() => {
+    const updateCartCount = () => {
+      const cart = apiClient.getCart();
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      setCartItemsCount(totalItems);
+    };
+
+    updateCartCount();
+    
+    // Обновляем каждую секунду для синхронизации между вкладками
+    const interval = setInterval(updateCartCount, 1000);
+    
+    // Слушаем изменения в localStorage
+    window.addEventListener('storage', updateCartCount);
+    
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('storage', updateCartCount);
+    };
+  }, []);
 
   // Применяем тему при изменении
   useEffect(() => {
@@ -59,12 +82,6 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => { 
   const { data: user } = useQuery({
     queryKey: ['currentUser'],
     queryFn: apiClient.getCurrentUser,
-    enabled: auth.status === "authenticated"
-  });
-
-  const { data: reservations } = useQuery({
-    queryKey: ['userReservations'],
-    queryFn: apiClient.listUserReservations,
     enabled: auth.status === "authenticated"
   });
 
@@ -153,9 +170,9 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => { 
                   <Link to="/reservations" className="flex items-center gap-2">
                     <Calendar size={16} />
                     <span className="hidden lg:inline">{t('common.orders')}</span>
-                    {reservations?.length > 0 && (
+                    {cartItemsCount > 0 && (
                       <Badge variant="secondary" className="ml-1 h-5 min-w-5 text-xs !bg-orange-600 dark:!bg-orange-500 !text-white hover:!bg-orange-700 dark:hover:!bg-orange-600">
-                        {reservations.length}
+                        {cartItemsCount}
                       </Badge>
                     )}
                   </Link>
@@ -189,8 +206,8 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => { 
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                   align="end"
-                  className="w-56 p-2 bg-background/95 backdrop-blur border border-border/50 shadow-lg"
-                  sideOffset={8}
+                  className="w-56 p-2 bg-background/95 backdrop-blur border border-border/50 shadow-lg z-[100]"
+                  sideOffset={4}
                 >
                   <div className="px-3 py-2 border-b border-border/50 mb-2">
                     <p className="text-sm font-medium">{user?.email}</p>
@@ -265,9 +282,9 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => { 
                   <Link to="/reservations" className="flex items-center gap-3">
                     <Calendar size={18} />
                     <span className="font-medium">{t('common.orders')}</span>
-                    {reservations?.length > 0 && (
+                    {cartItemsCount > 0 && (
                       <Badge variant="secondary" className="ml-auto h-6 min-w-6 !bg-orange-600 dark:!bg-orange-500 !text-white hover:!bg-orange-700 dark:hover:!bg-orange-600">
-                        {reservations.length}
+                        {cartItemsCount}
                       </Badge>
                     )}
                   </Link>
