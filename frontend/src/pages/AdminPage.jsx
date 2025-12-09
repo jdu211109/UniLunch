@@ -5,9 +5,11 @@ import MenusManager from "../components/admin/MenusManager";
 import OrdersManager from "../components/admin/OrdersManager";
 import OrderStatistics from "../components/admin/OrderStatistics";
 import { LayoutDashboard, UtensilsCrossed, ShoppingBag, BarChart3 } from "lucide-react";
+import { useLanguage } from "../hooks/useLanguage";
 
 export default function AdminPage() {
   const [activeTab, setActiveTab] = useState("menus");
+  const { t } = useLanguage();
 
   return (
     <div className="container mx-auto py-6 px-4">
@@ -21,7 +23,7 @@ export default function AdminPage() {
               }`}
           >
             <LayoutDashboard size={16} className="mr-2" />
-            Menus
+            {t('admin.menus')}
           </button>
           <button
             onClick={() => setActiveTab("meals")}
@@ -31,7 +33,7 @@ export default function AdminPage() {
               }`}
           >
             <UtensilsCrossed size={16} className="mr-2" />
-            Meals
+            {t('admin.meals')}
           </button>
           <button
             onClick={() => setActiveTab("orders")}
@@ -41,7 +43,7 @@ export default function AdminPage() {
               }`}
           >
             <ShoppingBag size={16} className="mr-2" />
-            Orders
+            {t('admin.orders')}
           </button>
           <button
             onClick={() => setActiveTab("statistics")}
@@ -51,7 +53,7 @@ export default function AdminPage() {
               }`}
           >
             <BarChart3 size={16} className="mr-2" />
-            Statistics
+            {t('admin.statistics')}
           </button>
         </div>
       </div>

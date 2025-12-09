@@ -4,9 +4,11 @@ import { apiClient } from "../../utils/apiClient";
 import { Plus, Edit, Trash2, Leaf, Flame, Eye, EyeOff } from "lucide-react";
 import { Button, Card, Badge, AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "../ui";
 import MealFormDialog from "../meals/MealFormDialog";
+import { useLanguage } from "../../hooks/useLanguage";
 
 export default function MealsManager() {
     const queryClient = useQueryClient();
+    const { t } = useLanguage();
     const { data: meals = [] } = useQuery({
         queryKey: ["meals"],
         queryFn: apiClient.listMeals
@@ -44,10 +46,10 @@ export default function MealsManager() {
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold">Meals</h2>
+                <h2 className="text-2xl font-bold">{t('mealsManager.title')}</h2>
                 <Button onClick={() => setIsAddMealOpen(true)}>
                     <Plus size={16} className="mr-2" />
-                    Add Meal
+                    {t('mealsManager.addMeal')}
                 </Button>
             </div>
 
@@ -83,30 +85,34 @@ export default function MealsManager() {
                                             size="sm"
                                             onClick={() => updateMealMutation.mutate({ ...meal, isAvailable: meal.isAvailable === false ? true : false })}
                                             className={meal.isAvailable !== false ? "text-green-600" : "text-muted-foreground"}
-                                            title={meal.isAvailable !== false ? "Mark as Unavailable" : "Mark as Available"}
+                                            title={meal.isAvailable !== false ? t('mealsManager.markAsUnavailable') : t('mealsManager.markAsAvailable')}
                                         >
                                             {meal.isAvailable !== false ? <Eye size={16} /> : <EyeOff size={16} />}
                                         </Button>
                                         <AlertDialog>
                                             <AlertDialogTrigger asChild>
-                                                <Button variant="outline" size="sm" className="text-destructive">
+                                                <Button variant="outline" size="sm" className="text-destructive hover:text-destructive hover:bg-destructive/10">
                                                     <Trash2 size={16} />
                                                 </Button>
                                             </AlertDialogTrigger>
                                             <AlertDialogContent>
                                                 <AlertDialogHeader>
-                                                    <AlertDialogTitle>Delete Meal</AlertDialogTitle>
-                                                    <AlertDialogDescription>
-                                                        Are you sure you want to delete "{meal.name}"?
+                                                    <div className="flex items-center gap-3 mb-2">
+                                                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10">
+                                                            <Trash2 className="h-6 w-6 text-destructive" />
+                                                        </div>
+                                                        <AlertDialogTitle className="text-xl">{t('mealsManager.deleteMeal')}</AlertDialogTitle>
+                                                    </div>
+                                                    <AlertDialogDescription className="text-base">
+                                                        {t('mealsManager.deleteConfirmation')} <span className="font-semibold text-foreground">"{meal.name}"</span>?
                                                     </AlertDialogDescription>
                                                 </AlertDialogHeader>
                                                 <AlertDialogFooter>
-                                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                    <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
                                                     <AlertDialogAction
                                                         onClick={() => deleteMealMutation.mutate({ id: meal.id })}
-                                                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                                                     >
-                                                        Delete
+                                                        {t('common.delete')}
                                                     </AlertDialogAction>
                                                 </AlertDialogFooter>
                                             </AlertDialogContent>
@@ -117,9 +123,9 @@ export default function MealsManager() {
                                     {meal.description}
                                 </p>
                                 <div className="flex flex-wrap gap-1 mb-2">
-                                    {meal.category && categories[meal.category] && (
+                                    {meal.category && (
                                         <Badge variant="secondary" className="text-xs px-2 py-0">
-                                            {categories[meal.category]}
+                                            {t(`menu.categories.${meal.category}`)}
                                         </Badge>
                                     )}
                                 </div>
@@ -127,18 +133,18 @@ export default function MealsManager() {
                                     {meal.isVegetarian && (
                                         <Badge variant="outline" className="bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-700 text-xs px-2 py-0">
                                             <Leaf size={12} className="mr-1 text-green-600 dark:text-green-400" />
-                                            Vegetarian
+                                            {t('mealsManager.vegetarian')}
                                         </Badge>
                                     )}
                                     {meal.isSpicy && (
                                         <Badge variant="outline" className="bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-700 text-xs px-2 py-0">
                                             <Flame size={12} className="mr-1 text-red-600 dark:text-red-400" />
-                                            Spicy
+                                            {t('mealsManager.spicy')}
                                         </Badge>
                                     )}
                                     {meal.isAvailable === false && (
                                         <Badge variant="secondary" className="text-xs px-2 py-0">
-                                            Unavailable
+                                            {t('mealsManager.unavailable')}
                                         </Badge>
                                     )}
                                 </div>

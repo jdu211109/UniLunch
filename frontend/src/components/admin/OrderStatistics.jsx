@@ -3,8 +3,10 @@ import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../../utils/apiClient";
 import { Card } from "../ui";
 import { DollarSign, ShoppingBag, CheckCircle, XCircle, TrendingUp } from "lucide-react";
+import { useLanguage } from "../../hooks/useLanguage";
 
 export default function OrderStatistics() {
+    const { t } = useLanguage();
     const { data, isLoading } = useQuery({
         queryKey: ["admin-orders"],
         queryFn: apiClient.listAdminOrders,
@@ -54,12 +56,12 @@ export default function OrderStatistics() {
     }, [orders]);
 
     if (isLoading) {
-        return <div className="p-8 text-center">Загрузка статистики...</div>;
+        return <div className="p-8 text-center">{t('orderStatistics.loadingStats')}</div>;
     }
 
     return (
         <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Статистика заказов</h2>
+            <h2 className="text-2xl font-bold">{t('orderStatistics.title')}</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <Card className="p-6">
@@ -68,7 +70,7 @@ export default function OrderStatistics() {
                             <DollarSign size={24} />
                         </div>
                         <div>
-                            <p className="text-sm text-muted-foreground">Общий доход</p>
+                            <p className="text-sm text-muted-foreground">{t('orderStatistics.totalRevenue')}</p>
                             <h3 className="text-2xl font-bold">${stats.totalRevenue.toFixed(2)}</h3>
                         </div>
                     </div>
@@ -80,7 +82,7 @@ export default function OrderStatistics() {
                             <ShoppingBag size={24} />
                         </div>
                         <div>
-                            <p className="text-sm text-muted-foreground">Всего заказов</p>
+                            <p className="text-sm text-muted-foreground">{t('orderStatistics.totalOrders')}</p>
                             <h3 className="text-2xl font-bold">{stats.totalOrders}</h3>
                         </div>
                     </div>
@@ -92,7 +94,7 @@ export default function OrderStatistics() {
                             <CheckCircle size={24} />
                         </div>
                         <div>
-                            <p className="text-sm text-muted-foreground">Выполнено</p>
+                            <p className="text-sm text-muted-foreground">{t('orderStatistics.completed')}</p>
                             <h3 className="text-2xl font-bold">{stats.completedOrders}</h3>
                         </div>
                     </div>
@@ -104,7 +106,7 @@ export default function OrderStatistics() {
                             <XCircle size={24} />
                         </div>
                         <div>
-                            <p className="text-sm text-muted-foreground">Отменено</p>
+                            <p className="text-sm text-muted-foreground">{t('orderStatistics.cancelled')}</p>
                             <h3 className="text-2xl font-bold">{stats.cancelledOrders}</h3>
                         </div>
                     </div>
@@ -115,7 +117,7 @@ export default function OrderStatistics() {
                 <Card className="p-6">
                     <div className="flex items-center gap-2 mb-4">
                         <TrendingUp size={20} className="text-primary" />
-                        <h3 className="text-lg font-bold">Популярные блюда</h3>
+                        <h3 className="text-lg font-bold">{t('orderStatistics.popularItems')}</h3>
                     </div>
                     <div className="space-y-4">
                         {stats.popularItems.length > 0 ? (
@@ -123,12 +125,12 @@ export default function OrderStatistics() {
                                 <div key={index} className="flex justify-between items-center border-b pb-2 last:border-0 last:pb-0">
                                     <span className="font-medium">{item.name}</span>
                                     <span className="text-sm bg-secondary px-2 py-1 rounded-full">
-                                        {item.count} продано
+                                        {item.count} {t('orderStatistics.sold')}
                                     </span>
                                 </div>
                             ))
                         ) : (
-                            <p className="text-muted-foreground text-sm">Нет данных о продажах.</p>
+                            <p className="text-muted-foreground text-sm">{t('orderStatistics.noSalesData')}</p>
                         )}
                     </div>
                 </Card>

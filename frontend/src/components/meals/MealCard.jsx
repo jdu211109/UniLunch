@@ -11,6 +11,7 @@ import {
   Badge,
   Button,
 } from '../ui'
+import { useLanguage } from '../../hooks/useLanguage'
 
 export default function MealCard({
   meal,
@@ -20,6 +21,7 @@ export default function MealCard({
   onDecreaseQuantity,
   onToggleFavorite,
 }) {
+  const { t } = useLanguage()
   const isAvailable = meal.isAvailable !== false;
 
   return (
@@ -38,29 +40,10 @@ export default function MealCard({
         {!isAvailable && (
           <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10">
             <span className="text-white font-bold text-xl border-2 border-white px-4 py-2 rounded-md transform -rotate-12">
-              SOLD OUT
+              {t('menu.soldOut')}
             </span>
           </div>
         )}
-        <button
-          onClick={onToggleFavorite}
-          className="absolute top-3 right-3 p-2 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-110"
-          aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-        >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill={isFavorite ? 'currentColor' : 'none'}
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className={isFavorite ? 'text-yellow-500' : 'text-gray-600'}
-          >
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-          </svg>
-        </button>
       </div>
       <CardHeader className="pb-3">
         <div className="flex justify-between items-start">
@@ -74,7 +57,7 @@ export default function MealCard({
                 className="bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-700"
               >
                 <Leaf size={12} className="mr-1 text-green-600 dark:text-green-400" />
-                Veg
+                {t('menu.vegetarian')}
               </Badge>
             )}
             {meal.isSpicy && (
@@ -83,7 +66,7 @@ export default function MealCard({
                 className="bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-700"
               >
                 <Flame size={12} className="mr-1 text-red-600 dark:text-red-400" />
-                Spicy
+                {t('menu.spicy')}
               </Badge>
             )}
           </div>

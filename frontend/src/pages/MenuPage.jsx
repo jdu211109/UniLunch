@@ -3,21 +3,15 @@ import React, { useState, useRef } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { apiClient } from '../utils/apiClient'
 import MealCard from '../components/meals/MealCard'
+import { useLanguage } from '../hooks/useLanguage'
 
-const CATEGORIES = [
-  { key: 'set', label: 'Сет' },
-  { key: 'main', label: 'Блюда' },
-  { key: 'salad', label: 'Салаты' },
-  { key: 'soup', label: 'Суп/Самса' },
-  { key: 'dessert', label: 'Десерты' },
-  { key: 'drink', label: 'Напиток' },
-  { key: 'extra', label: 'Дополнительно' },
-]
+const CATEGORY_KEYS = ['set', 'main', 'salad', 'soup', 'dessert', 'drink', 'extra']
 
 export default function MenuPage() {
   const queryClient = useQueryClient()
   const [quantities, setQuantities] = useState({})
   const categoryRefs = useRef({})
+  const { t } = useLanguage()
 
   const { data: meals = [] } = useQuery({
     queryKey: ['meals'],
@@ -50,7 +44,7 @@ export default function MenuPage() {
   const handleIncreaseQuantity = (meal) => {
     const newQuantity = (quantities[meal.id] || 0) + 1
     setQuantities((prev) => ({ ...prev, [meal.id]: newQuantity }))
-    
+
     // Добавляем в корзину
     const cart = apiClient.getCart()
     const existingItem = cart.find(item => item.mealId == meal.id)
@@ -64,10 +58,10 @@ export default function MenuPage() {
   const handleDecreaseQuantity = (meal) => {
     const currentQuantity = quantities[meal.id] || 0
     if (currentQuantity <= 0) return
-    
+
     const newQuantity = currentQuantity - 1
     setQuantities((prev) => ({ ...prev, [meal.id]: newQuantity }))
-    
+
     // Обновляем корзину
     apiClient.updateCartItem(meal.id, newQuantity)
   }
@@ -79,7 +73,12 @@ export default function MenuPage() {
     }
   }
 
-  const mealsByCategory = CATEGORIES.map((category) => ({
+  const categories = CATEGORY_KEYS.map((key) => ({
+    key,
+    label: t(`menu.categories.${key}`)
+  }))
+
+  const mealsByCategory = categories.map((category) => ({
     ...category,
     meals: meals.filter((meal) => meal.category === category.key),
   })).filter((cat) => cat.meals.length > 0)
@@ -87,12 +86,12 @@ export default function MenuPage() {
   return (
     <div className="container mx-auto py-6 px-4">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-6 text-center">Меню на сегодня</h1>
+        <h1 className="text-3xl font-bold mb-6 text-center">{t('menu.title')}</h1>
 
         {/* Category Navigation */}
         <div className="flex justify-center sticky top-0 bg-background/95 backdrop-blur-sm py-4 z-10">
           <div className="bg-muted p-1 rounded-lg flex flex-wrap gap-1">
-            {CATEGORIES.map((category) => {
+            {categories.map((category) => {
               const count = meals.filter((m) => m.category === category.key).length
               return count > 0 ? (
                 <button

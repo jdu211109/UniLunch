@@ -3,8 +3,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Input, Label, Textarea, Checkbox, Button } from '../ui';
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '../../utils/apiClient';
+import { useLanguage } from '../../hooks/useLanguage';
 
 export default function MealFormDialog({ isOpen, onClose, onSubmit, initialData, isLoading }) {
+  const { t } = useLanguage();
   const [formData, setFormData] = React.useState(initialData || {
     name: '',
     description: '',
@@ -56,26 +58,26 @@ export default function MealFormDialog({ isOpen, onClose, onSubmit, initialData,
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{initialData ? 'Edit Meal' : 'Add Meal'}</DialogTitle>
+          <DialogTitle>{initialData ? t('mealForm.editMeal') : t('mealForm.addMeal')}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label>Meal Name</Label>
+              <Label>{t('mealForm.mealName')}</Label>
               <Input
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               />
             </div>
             <div className="space-y-2">
-              <Label>Description</Label>
+              <Label>{t('mealForm.description')}</Label>
               <Textarea
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               />
             </div>
             <div className="space-y-2">
-              <Label>Price ($)</Label>
+              <Label>{t('mealForm.price')}</Label>
               <Input
                 type="number"
                 step="0.01"
@@ -84,19 +86,19 @@ export default function MealFormDialog({ isOpen, onClose, onSubmit, initialData,
               />
             </div>
             <div className="space-y-2">
-              <Label>Категория блюда</Label>
+              <Label>{t('mealForm.category')}</Label>
               <select
                 className="w-full px-3 py-2 border rounded-md bg-background"
                 value={formData.category}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
               >
-                {Object.entries(categories).map(([key, value]) => (
-                  <option key={key} value={key}>{value}</option>
+                {Object.keys(categories).map((key) => (
+                  <option key={key} value={key}>{t(`menu.categories.${key}`)}</option>
                 ))}
               </select>
             </div>
             <div className="space-y-2">
-              <Label>Meal Image</Label>
+              <Label>{t('mealForm.mealImage')}</Label>
               <div className="flex flex-col gap-4">
                 <Input
                   type="file"
@@ -117,7 +119,7 @@ export default function MealFormDialog({ isOpen, onClose, onSubmit, initialData,
                       className="absolute top-2 right-2"
                       onClick={() => setFormData(prev => ({ ...prev, imageUrl: '' }))}
                     >
-                      Remove
+                      {t('mealForm.remove')}
                     </Button>
                   </div>
                 )}
@@ -129,23 +131,23 @@ export default function MealFormDialog({ isOpen, onClose, onSubmit, initialData,
                   checked={formData.isVegetarian}
                   onCheckedChange={(val) => setFormData({ ...formData, isVegetarian: val })}
                 />
-                <Label>Вегетарианское</Label>
+                <Label>{t('mealForm.vegetarian')}</Label>
               </div>
               <div className="flex items-center gap-2">
                 <Checkbox
                   checked={formData.isSpicy}
                   onCheckedChange={(val) => setFormData({ ...formData, isSpicy: val })}
                 />
-                <Label>Острое</Label>
+                <Label>{t('mealForm.spicy')}</Label>
               </div>
             </div>
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={onClose}>
-              Отмена
+              {t('mealForm.cancel')}
             </Button>
             <Button type="submit" disabled={isLoading}>
-              {isLoading ? 'Сохранение...' : 'Сохранить'}
+              {isLoading ? t('mealForm.saving') : t('mealForm.save')}
             </Button>
           </DialogFooter>
         </form>
