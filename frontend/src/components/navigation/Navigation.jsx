@@ -107,7 +107,7 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => { 
                   placeholder={t('common.search')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="h-9 w-64 pl-10 pr-4 rounded-full border-border/50 bg-muted/50 focus:bg-background focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500/50 transition-all duration-200"
+                  className="h-9 w-64 pl-10 pr-4 rounded-full border-2 border-orange-500 bg-muted/50 focus:bg-background focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/70 focus-visible:ring-offset-0 focus-visible:border-orange-500 focus-visible:shadow-none transition-all duration-200"
                 />
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -266,7 +266,7 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => { 
                     placeholder={t('common.search')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="h-11 w-full pl-11 pr-4 rounded-xl border-border/50 bg-muted/50 focus:bg-background focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500/50"
+                    className="h-11 w-full pl-11 pr-4 rounded-xl border-2 border-orange-500 bg-muted/50 focus:bg-background focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/70 focus-visible:ring-offset-0 focus-visible:border-orange-500 focus-visible:shadow-none"
                   />
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">

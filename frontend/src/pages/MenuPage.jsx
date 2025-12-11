@@ -7,7 +7,7 @@ import { useLanguage } from '../hooks/useLanguage'
 
 const CATEGORY_KEYS = ['set', 'main', 'salad', 'soup', 'dessert', 'drink', 'extra']
 
-export default function MenuPage() {
+export default function MenuPage({ searchQuery = '' }) {
   const queryClient = useQueryClient()
   const [quantities, setQuantities] = useState({})
   const categoryRefs = useRef({})
@@ -78,32 +78,38 @@ export default function MenuPage() {
     label: t(`menu.categories.${key}`)
   }))
 
+  const normalizedQuery = searchQuery.trim().toLowerCase()
+
+  const filteredMeals = normalizedQuery
+    ? meals.filter((meal) => {
+      const name = meal.name?.toLowerCase() || ''
+      const description = meal.description?.toLowerCase() || ''
+      return name.includes(normalizedQuery) || description.includes(normalizedQuery)
+    })
+    : meals
+
   const mealsByCategory = categories.map((category) => ({
     ...category,
-    meals: meals.filter((meal) => meal.category === category.key),
+    meals: filteredMeals.filter((meal) => meal.category === category.key),
   })).filter((cat) => cat.meals.length > 0)
 
   return (
     <div className="container mx-auto py-6 px-4">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-6 text-center">{t('menu.title')}</h1>
-
-        {/* Category Navigation */}
-        <div className="flex justify-center sticky top-0 bg-background/95 backdrop-blur-sm py-4 z-10">
-          <div className="bg-muted p-1 rounded-lg flex flex-wrap gap-1">
-            {categories.map((category) => {
-              const count = meals.filter((m) => m.category === category.key).length
-              return count > 0 ? (
-                <button
-                  key={category.key}
-                  onClick={() => scrollToCategory(category.key)}
-                  className="px-4 py-2 rounded-md text-sm font-medium transition-all text-muted-foreground hover:text-foreground hover:bg-background/50"
-                >
-                  {category.label}
-                </button>
-              ) : null
-            })}
-          </div>
+      {/* Category Navigation (sticky under top bar) */}
+      <div className="sticky top-16 z-40 mb-8 flex justify-center py-3 pointer-events-none">
+        <div className="bg-muted p-1 rounded-lg flex flex-wrap gap-1 pointer-events-auto">
+          {categories.map((category) => {
+            const count = meals.filter((m) => m.category === category.key).length
+            return count > 0 ? (
+              <button
+                key={category.key}
+                onClick={() => scrollToCategory(category.key)}
+                className="px-4 py-2 rounded-md text-sm font-medium transition-all text-muted-foreground hover:text-foreground hover:bg-background/50"
+              >
+                {category.label}
+              </button>
+            ) : null
+          })}
         </div>
       </div>
 

@@ -13,8 +13,8 @@ export default function AdminPage() {
 
   return (
     <div className="container mx-auto py-6 px-4">
-      <div className="flex justify-center mb-8">
-        <div className="bg-muted p-1 rounded-lg flex">
+      <div className="sticky top-16 z-40 mb-8 flex justify-center py-3 pointer-events-none">
+        <div className="bg-muted p-1 rounded-lg flex pointer-events-auto">
           <button
             onClick={() => setActiveTab("menus")}
             className={`flex items-center px-4 py-2 rounded-md text-sm font-medium transition-all ${activeTab === "menus"

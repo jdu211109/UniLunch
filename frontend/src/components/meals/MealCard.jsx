@@ -89,7 +89,7 @@ export default function MealCard({
               variant="ghost"
               size="icon"
               onClick={onDecreaseQuantity}
-              className="h-10 w-10 rounded-full hover:bg-background hover:shadow-sm text-lg font-bold"
+              className="h-10 w-10 rounded-full !bg-transparent hover:bg-muted/60 text-lg font-bold"
               disabled={quantity === 0 || !isAvailable}
             >
               -
@@ -99,7 +99,7 @@ export default function MealCard({
               variant="ghost"
               size="icon"
               onClick={onIncreaseQuantity}
-              className="h-10 w-10 rounded-full hover:bg-background hover:shadow-sm text-lg font-bold"
+              className="h-10 w-10 rounded-full !bg-transparent hover:bg-muted/60 text-lg font-bold"
               disabled={!isAvailable}
             >
               +

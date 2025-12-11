@@ -98,7 +98,7 @@ export default function OrdersManager() {
                     <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
                         placeholder={t('ordersManager.searchOrders')}
-                        className="pl-8"
+                        className="h-9 w-full pl-8 rounded-full border-2 border-orange-500 bg-muted/50 focus:bg-background focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/70 focus-visible:ring-offset-0 focus-visible:border-orange-500 focus-visible:shadow-none"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
