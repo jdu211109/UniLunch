@@ -43,7 +43,10 @@ export default function MenusManager() {
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold">{t('menusManager.title')}</h2>
-                <Button onClick={() => setIsAddMenuOpen(true)}>
+                <Button
+                    onClick={() => setIsAddMenuOpen(true)}
+                    className="!bg-orange-500 hover:!bg-orange-600 !text-white border-0"
+                >
                     <Plus size={16} className="mr-2" />
                     {t('menusManager.createMenu')}
                 </Button>

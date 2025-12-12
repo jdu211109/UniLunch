@@ -47,7 +47,10 @@ export default function MealsManager() {
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold">{t('mealsManager.title')}</h2>
-                <Button onClick={() => setIsAddMealOpen(true)}>
+                <Button
+                    onClick={() => setIsAddMealOpen(true)}
+                    className="!bg-orange-500 hover:!bg-orange-600 !text-white border-0"
+                >
                     <Plus size={16} className="mr-2" />
                     {t('mealsManager.addMeal')}
                 </Button>

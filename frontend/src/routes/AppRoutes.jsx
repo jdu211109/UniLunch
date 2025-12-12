@@ -17,7 +17,7 @@ export default function AppRoutes({ searchQuery, setSearchQuery }) {
         element={
           <ProtectedRoute>
             <MainLayout searchQuery={searchQuery} setSearchQuery={setSearchQuery}>
-              <MenuPage />
+              <MenuPage searchQuery={searchQuery} />
             </MainLayout>
           </ProtectedRoute>
         }
