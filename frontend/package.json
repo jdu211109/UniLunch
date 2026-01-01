@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "lint": "eslint src --ext .js,.jsx",
     "preview": "vite preview",
@@ -19,6 +19,8 @@
     "@tailwindcss/typography": "^0.5.16",
     "@tanstack/react-query": "^5.80.6",
     "@vitejs/plugin-react": "^4.5.1",
+    "baseline-browser-mapping": "^2.9.11",
+    "caniuse-lite": "^1.0.30001762",
     "class-variance-authority": "^0.7.1",
     "framer-motion": "^12.16.0",
     "lucide-react": "^0.513.0",
