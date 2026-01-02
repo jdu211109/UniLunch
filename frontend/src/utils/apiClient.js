@@ -54,45 +54,77 @@ const setStoredData = (key, data) => {
   localStorage.setItem(key, JSON.stringify(data))
 }
 
-// Initial Mock Data
-const INITIAL_MEALS = [
-  {
-    id: '1',
-    name: 'Spicy Thai Curry Tofu',
-    description:
-      'Crispy tofu cubes in a rich, spicy Thai red curry with bamboo shoots, bell peppers, and Thai basil. Served with jasmine rice.',
-    price: 10.99,
-    imageUrl: 'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=400&h=300&fit=crop',
-    isVegetarian: true,
-    isSpicy: true,
-    isAvailable: true,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: '2',
-    name: 'Classic Burger',
-    description: 'Juicy beef patty with lettuce, tomato, and special sauce',
-    price: 12.99,
-    imageUrl: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop',
-    isVegetarian: false,
-    isSpicy: false,
-    isAvailable: true,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-]
-
+// Initial Mock Data (Menus only - Meals come from backend)
 const INITIAL_MENUS = [
   {
     id: '1',
     name: 'Lunch Special',
     description: 'Available Mon-Fri 11am-2pm',
     date: new Date().toISOString(),
-    mealIds: ['1', '2'],
+    mealIds: [1, 2], // IDs match backend seed IDs
     isActive: true,
     price: 15.99,
     imageUrl: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop',
+  },
+  {
+    id: '2',
+    name: 'Vegetarian Delight',
+    description: 'A healthy mix of our best vegetarian options',
+    date: new Date().toISOString(),
+    mealIds: [6, 8, 11], // Caesar Salad, Quinoa Salad, Tomato Soup
+    isActive: true,
+    price: 18.50,
+    imageUrl: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop',
+  },
+  {
+    id: '3',
+    name: 'Meat Lover\'s Feast',
+    description: 'Hearty meals for big appetites',
+    date: new Date().toISOString(),
+    mealIds: [2, 5], // Burger, Beef Stir Fry
+    isActive: true,
+    price: 24.99,
+    imageUrl: 'https://images.unsplash.com/photo-1550547660-d9450f859349?w=400&h=300&fit=crop',
+  },
+  {
+    id: '4',
+    name: 'Asian Fusion Set',
+    description: 'A taste of the East',
+    date: new Date().toISOString(),
+    mealIds: [1, 10, 18], // Thai Curry, Miso Soup, Green Tea
+    isActive: true,
+    price: 16.50,
+    imageUrl: 'https://images.unsplash.com/photo-1552611052-33e04de081de?w=400&h=300&fit=crop',
+  },
+  {
+    id: '5',
+    name: 'Italian Dinner',
+    description: 'Classic flavors of Italy',
+    date: new Date().toISOString(),
+    mealIds: [4, 6, 12], // Carbonara, Caesar Salad, Brownie
+    isActive: true,
+    price: 22.00,
+    imageUrl: 'https://images.unsplash.com/photo-1498579150354-977475b7ea0b?w=400&h=300&fit=crop',
+  },
+  {
+    id: '6',
+    name: 'Student Budget Saver',
+    description: 'Affordable and filling',
+    date: new Date().toISOString(),
+    mealIds: [11, 2], // Chicken Noodle Soup, Burger (Wait, Burger is 2, Soup is 11)
+    isActive: true,
+    price: 14.00,
+    imageUrl: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=400&h=300&fit=crop',
+  },
+  {
+    id: '7',
+    name: 'Sweet Tooth Set',
+    description: 'A selection of our finest desserts and coffee',
+    date: new Date().toISOString(),
+    mealIds: [12, 13, 14, 16], // Brownie, Cheesecake, Tart, Iced Coffee
+    isActive: true,
+    price: 18.00,
+    imageUrl: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=400&h=300&fit=crop',
   },
 ]
 
@@ -440,12 +472,13 @@ export const apiClient = {
   listMenus: async () => {
     await delay(500)
     const menus = getStoredData(STORAGE_KEYS.MENUS, INITIAL_MENUS)
-    const meals = getStoredData(STORAGE_KEYS.MEALS, INITIAL_MEALS)
+    // Fetch meals from backend to match with menu IDs
+    const meals = await apiClient.listMeals()
 
     // Enrich menus with full meal objects
     return menus.map((menu) => ({
       ...menu,
-      meals: menu.mealIds.map((id) => meals.find((m) => m.id === id)).filter(Boolean),
+      meals: menu.mealIds.map((id) => meals.find((m) => m.id == id)).filter(Boolean),
     }))
   },
 
