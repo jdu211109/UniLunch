@@ -7,7 +7,7 @@ export * from './Dialog.jsx';
 export * from './DropdownMenu.jsx';
 export * from './Input.jsx';
 export * from './Label.jsx';
+export * from './Select.jsx';
 export * from './Separator.jsx';
 export * from './Switch.jsx';
 export * from './Textarea.jsx';
-

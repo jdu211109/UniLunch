@@ -27,7 +27,12 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  Switch
+  Switch,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "../ui/index.js";
 
 export default function Navigation({ searchQuery = "", setSearchQuery = () => { } }) {
@@ -119,18 +124,34 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => { 
           )}
         </div>
 
-        {/* Mobile menu button */}
-        <button
-          className="block md:hidden p-2 rounded-lg hover:bg-accent transition-colors duration-200"
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label="Toggle menu"
-        >
-          <div className="relative w-6 h-6">
-            <span className={`absolute block h-0.5 w-6 bg-current transition-all duration-300 ${isOpen ? 'rotate-45 top-3' : 'top-1'}`} />
-            <span className={`absolute block h-0.5 w-6 bg-current transition-all duration-300 ${isOpen ? 'opacity-0' : 'top-3'}`} />
-            <span className={`absolute block h-0.5 w-6 bg-current transition-all duration-300 ${isOpen ? '-rotate-45 top-3' : 'top-5'}`} />
-          </div>
-        </button>
+        {/* Mobile Actions */}
+        <div className="flex items-center gap-1 md:hidden">
+          {auth.status === "authenticated" && (
+            <Link 
+              to="/reservations" 
+              className="p-2 rounded-lg hover:bg-accent transition-colors duration-200 relative"
+              aria-label={t('common.orders')}
+            >
+              <Calendar className="w-6 h-6" />
+              {cartItemsCount > 0 && (
+                <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-orange-600 rounded-full border-2 border-background"></span>
+              )}
+            </Link>
+          )}
+
+          {/* Mobile menu button */}
+          <button
+            className="p-2 rounded-lg hover:bg-accent transition-colors duration-200"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle menu"
+          >
+            <div className="relative w-6 h-6">
+              <span className={`absolute block h-0.5 w-6 bg-current transition-all duration-300 ${isOpen ? 'rotate-45 top-3' : 'top-1'}`} />
+              <span className={`absolute block h-0.5 w-6 bg-current transition-all duration-300 ${isOpen ? 'opacity-0' : 'top-3'}`} />
+              <span className={`absolute block h-0.5 w-6 bg-current transition-all duration-300 ${isOpen ? '-rotate-45 top-3' : 'top-5'}`} />
+            </div>
+          </button>
+        </div>
 
         {/* Desktop navigation */}
         <nav className="hidden md:flex items-center gap-2">
@@ -151,17 +172,17 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => { 
 
                 <div className="w-px h-4 bg-border" />
 
-                <select
-                  value={language}
-                  onChange={(e) => setLanguage(e.target.value)}
-                  className="bg-transparent border-0 outline-none text-sm cursor-pointer hover:text-primary py-1 px-2 rounded transition-colors duration-200"
-                  title={t('common.language')}
-                >
-                  <option value="ru">🇷🇺 РУС</option>
-                  <option value="en">🇺🇸 ENG</option>
-                  <option value="uz">🇺🇿 UZB</option>
-                  <option value="ja">🇯🇵 日本語</option>
-                </select>
+                <Select value={language} onValueChange={setLanguage}>
+                  <SelectTrigger className="h-8 w-[100px] border-none bg-transparent focus:ring-0 px-2 text-sm font-medium">
+                    <SelectValue placeholder={t('common.language')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ru">🇷🇺 РУС</SelectItem>
+                    <SelectItem value="en">🇺🇸 ENG</SelectItem>
+                    <SelectItem value="uz">🇺🇿 UZB</SelectItem>
+                    <SelectItem value="ja">🇯🇵 日本語</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Navigation buttons */}
@@ -242,7 +263,7 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => { 
         {/* Mobile navigation */}
         <div
           className={`${isOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
-            } md:hidden fixed top-16 right-0 w-80 max-w-[90vw] h-[calc(100vh-4rem)] bg-background/95 backdrop-blur border-l border-border/50 shadow-xl transition-all duration-300 ease-in-out overflow-y-auto`}
+            } md:hidden fixed top-16 right-0 w-80 max-w-[90vw] h-[calc(100vh-4rem)] bg-background/95 backdrop-blur border-l border-border/50 shadow-xl transition-all duration-300 ease-in-out overflow-y-auto z-[100]`}
         >
           {auth.status === "authenticated" && (
             <div className="p-6 space-y-6">
@@ -328,16 +349,17 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => { 
                     <Globe size={18} />
                     <span className="font-medium">{t('common.language')}</span>
                   </div>
-                  <select
-                    value={language}
-                    onChange={(e) => setLanguage(e.target.value)}
-                    className="w-full h-10 bg-background rounded-lg px-3 border border-border/50 outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500/50 transition-all duration-200"
-                  >
-                    <option value="ru">🇷🇺 Русский</option>
-                    <option value="en">🇺🇸 English</option>
-                    <option value="uz">🇺🇿 O'zbek</option>
-                    <option value="ja">🇯🇵 日本語</option>
-                  </select>
+                  <Select value={language} onValueChange={setLanguage}>
+                    <SelectTrigger className="w-full h-10 bg-background border-border/50">
+                      <SelectValue placeholder={t('common.language')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="ru">🇷🇺 Русский</SelectItem>
+                      <SelectItem value="en">🇺🇸 English</SelectItem>
+                      <SelectItem value="uz">🇺🇿 O'zbek</SelectItem>
+                      <SelectItem value="ja">🇯🇵 日本語</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 

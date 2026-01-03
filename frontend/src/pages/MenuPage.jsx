@@ -156,7 +156,7 @@ export default function MenuPage({ searchQuery = '' }) {
   })).filter((cat) => cat.meals.length > 0)
 
   return (
-    <div className="container mx-auto py-6 px-4 relative">
+    <>
       {/* Right Rail Navigation */}
       <div className="fixed right-2 sm:right-4 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3 p-2 bg-background/80 backdrop-blur-md rounded-full shadow-lg border border-border/50">
         {categories.map((category) => {
@@ -193,36 +193,38 @@ export default function MenuPage({ searchQuery = '' }) {
         })}
       </div>
 
-      {/* Meals by Category */}
-      <div className="space-y-16 pr-12 sm:pr-0"> {/* Add right padding on mobile to avoid overlap */}
-        {mealsByCategory.map((category) => (
-          <div
-            key={category.key}
-            id={category.key}
-            ref={(el) => (categoryRefs.current[category.key] = el)}
-            className="scroll-mt-24"
-          >
-            <div className="flex items-center gap-4 mb-6">
-              <h2 className="text-2xl font-bold text-primary">{category.label}</h2>
-              <div className="h-px flex-1 bg-border/60"></div>
+      <div className="container mx-auto py-6 px-4 relative">
+        {/* Meals by Category */}
+        <div className="space-y-16 pr-12 sm:pr-0"> {/* Add right padding on mobile to avoid overlap */}
+          {mealsByCategory.map((category) => (
+            <div
+              key={category.key}
+              id={category.key}
+              ref={(el) => (categoryRefs.current[category.key] = el)}
+              className="scroll-mt-24"
+            >
+              <div className="flex items-center gap-4 mb-6">
+                <h2 className="text-2xl font-bold text-primary">{category.label}</h2>
+                <div className="h-px flex-1 bg-border/60"></div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+                {category.meals.map((meal) => (
+                  <MealCard
+                    key={meal.id}
+                    meal={meal}
+                    quantity={quantities[meal.id] || 0}
+                    onIncreaseQuantity={() => handleIncreaseQuantity(meal)}
+                    onDecreaseQuantity={() => handleDecreaseQuantity(meal)}
+                    onToggleFavorite={() => toggleFavoriteMutation.mutate(meal.id)}
+                    isFavorite={favoriteMealIds.includes(meal.id)}
+                  />
+                ))}
+              </div>
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
-              {category.meals.map((meal) => (
-                <MealCard
-                  key={meal.id}
-                  meal={meal}
-                  quantity={quantities[meal.id] || 0}
-                  onIncreaseQuantity={() => handleIncreaseQuantity(meal)}
-                  onDecreaseQuantity={() => handleDecreaseQuantity(meal)}
-                  onToggleFavorite={() => toggleFavoriteMutation.mutate(meal.id)}
-                  isFavorite={favoriteMealIds.includes(meal.id)}
-                />
-              ))}
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
