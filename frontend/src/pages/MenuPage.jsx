@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { apiClient } from '../utils/apiClient'
 import MealCard from '../components/meals/MealCard'
 import { useLanguage } from '../hooks/useLanguage'
+import { useAuth } from '../hooks/useAuth'
 import { 
   LayoutGrid, 
   UtensilsCrossed, 
@@ -35,6 +36,8 @@ export default function MenuPage({ searchQuery = '' }) {
   const labelTimerRef = useRef(null)
   const isManualScroll = useRef(false)
   const { t } = useLanguage()
+  const { user } = useAuth()
+  const isAdmin = user?.isAdmin
 
   const { data: meals = [] } = useQuery({
     queryKey: ['meals'],
@@ -101,6 +104,9 @@ export default function MenuPage({ searchQuery = '' }) {
   }, [activeCategory])
 
   const handleIncreaseQuantity = (meal) => {
+    // Admins cannot add items to cart
+    if (isAdmin) return
+    
     const newQuantity = (quantities[meal.id] || 0) + 1
     setQuantities((prev) => ({ ...prev, [meal.id]: newQuantity }))
     const cart = apiClient.getCart()
@@ -113,6 +119,9 @@ export default function MenuPage({ searchQuery = '' }) {
   }
 
   const handleDecreaseQuantity = (meal) => {
+    // Admins cannot modify cart
+    if (isAdmin) return
+    
     const currentQuantity = quantities[meal.id] || 0
     if (currentQuantity <= 0) return
     const newQuantity = currentQuantity - 1

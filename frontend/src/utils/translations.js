@@ -34,7 +34,7 @@ export const translations = {
       back: 'Назад',
       remove: 'Удалить',
       apply: 'Применить',
-      reset: 'Сбросить'
+      reset: 'Сбросить',
     },
     menu: {
       title: 'Меню на сегодня',
@@ -45,11 +45,11 @@ export const translations = {
         soup: 'Суп/Самса',
         dessert: 'Десерты',
         drink: 'Напиток',
-        extra: 'Дополнительно'
+        extra: 'Дополнительно',
       },
       soldOut: 'ПРОДАНО',
       vegetarian: 'Веган',
-      spicy: 'Острое'
+      spicy: 'Острое',
     },
     reservations: {
       title: 'Мои заказы',
@@ -76,11 +76,13 @@ export const translations = {
       error: 'Ошибка',
       cartEmpty: 'Корзина пуста',
       addItemsToCart: 'Добавьте блюда в корзину',
+      adminCannotOrder: 'Администраторы не могут заказывать',
+      adminCannotOrderDesc: 'Администраторы не могут размещать заказы',
       orderCancelled: 'Заказ отменён',
       orderCancelledSuccess: 'Ваш заказ был успешно отменён',
       cancelConfirmation: 'Вы уверены, что хотите отменить заказ?',
       cancelButton: 'Отменить',
-      sec: 'сек'
+      sec: 'сек',
     },
     filters: {
       title: 'Фильтры',
@@ -108,13 +110,13 @@ export const translations = {
       highestRated: 'По рейтингу',
       favoritesOnly: 'Только избранное',
       resetFilters: 'Сбросить фильтры',
-      foodType: 'Тип еды'
+      foodType: 'Тип еды',
     },
     admin: {
       menus: 'Меню',
       meals: 'Блюда',
       orders: 'Заказы',
-      statistics: 'Статистика'
+      statistics: 'Статистика',
     },
     mealsManager: {
       title: 'Блюда',
@@ -125,7 +127,7 @@ export const translations = {
       spicy: 'Острое',
       unavailable: 'Недоступно',
       markAsUnavailable: 'Отметить как недоступное',
-      markAsAvailable: 'Отметить как доступное'
+      markAsAvailable: 'Отметить как доступное',
     },
     menusManager: {
       title: 'Меню',
@@ -135,7 +137,7 @@ export const translations = {
       active: 'Активно',
       inactive: 'Неактивно',
       includedMeals: 'Включенные блюда',
-      more: 'ещё'
+      more: 'ещё',
     },
     ordersManager: {
       title: 'Управление заказами',
@@ -151,7 +153,7 @@ export const translations = {
       newOrder: 'новый заказ',
       newOrders: 'новых заказа',
       newOrdersMany: 'новых заказов',
-      waiting: 'ожидает'
+      waiting: 'ожидает',
     },
     orderStatistics: {
       title: 'Статистика заказов',
@@ -162,7 +164,7 @@ export const translations = {
       cancelled: 'Отменено',
       popularItems: 'Популярные блюда',
       sold: 'продано',
-      noSalesData: 'Нет данных о продажах.'
+      noSalesData: 'Нет данных о продажах.',
     },
     mealForm: {
       addMeal: 'Добавить блюдо',
@@ -177,7 +179,7 @@ export const translations = {
       cancel: 'Отмена',
       save: 'Сохранить',
       saving: 'Сохранение...',
-      remove: 'Удалить'
+      remove: 'Удалить',
     },
     menuForm: {
       createMenu: 'Создать новое меню',
@@ -196,7 +198,7 @@ export const translations = {
       cancel: 'Отмена',
       create: 'Создать меню',
       update: 'Обновить меню',
-      remove: 'Удалить'
+      remove: 'Удалить',
     },
     auth: {
       welcomeBack: 'С возвращением!',
@@ -253,14 +255,14 @@ export const translations = {
       enterEmail: 'Введите email',
       enter6DigitCode: 'Введите 6-значный код',
       failedToSendCode: 'Не удалось отправить код',
-      failedToResetPassword: 'Не удалось сбросить пароль'
+      failedToResetPassword: 'Не удалось сбросить пароль',
     },
     status: {
       completed: 'Выполнен',
       cancelled: 'Отменён',
       confirmed: 'Подтверждён',
-      pending: 'В ожидании'
-    }
+      pending: 'В ожидании',
+    },
   },
   en: {
     common: {
@@ -297,7 +299,7 @@ export const translations = {
       back: 'Back',
       remove: 'Remove',
       apply: 'Apply',
-      reset: 'Reset'
+      reset: 'Reset',
     },
     menu: {
       title: "Today's Menu",
@@ -308,11 +310,11 @@ export const translations = {
         soup: 'Soup/Samsa',
         dessert: 'Desserts',
         drink: 'Drinks',
-        extra: 'Extra'
+        extra: 'Extra',
       },
       soldOut: 'SOLD OUT',
       vegetarian: 'Veg',
-      spicy: 'Spicy'
+      spicy: 'Spicy',
     },
     reservations: {
       title: 'My Orders',
@@ -339,11 +341,13 @@ export const translations = {
       error: 'Error',
       cartEmpty: 'Cart is empty',
       addItemsToCart: 'Add items to cart',
+      adminCannotOrder: 'Administrators cannot order',
+      adminCannotOrderDesc: 'Administrators are not allowed to place orders',
       orderCancelled: 'Order Cancelled',
       orderCancelledSuccess: 'Your order has been successfully cancelled',
       cancelConfirmation: 'Are you sure you want to cancel the order?',
       cancelButton: 'Cancel',
-      sec: 'sec'
+      sec: 'sec',
     },
     filters: {
       title: 'Filters',
@@ -371,13 +375,13 @@ export const translations = {
       highestRated: 'Highest Rated',
       favoritesOnly: 'Favorites Only',
       resetFilters: 'Reset Filters',
-      foodType: 'Food Type'
+      foodType: 'Food Type',
     },
     admin: {
       menus: 'Menus',
       meals: 'Meals',
       orders: 'Orders',
-      statistics: 'Statistics'
+      statistics: 'Statistics',
     },
     mealsManager: {
       title: 'Meals',
@@ -388,7 +392,7 @@ export const translations = {
       spicy: 'Spicy',
       unavailable: 'Unavailable',
       markAsUnavailable: 'Mark as Unavailable',
-      markAsAvailable: 'Mark as Available'
+      markAsAvailable: 'Mark as Available',
     },
     menusManager: {
       title: 'Menus',
@@ -398,7 +402,7 @@ export const translations = {
       active: 'Active',
       inactive: 'Inactive',
       includedMeals: 'Included Meals',
-      more: 'more'
+      more: 'more',
     },
     ordersManager: {
       title: 'Order Management',
@@ -414,7 +418,7 @@ export const translations = {
       newOrder: 'new order',
       newOrders: 'new orders',
       newOrdersMany: 'new orders',
-      waiting: 'waiting'
+      waiting: 'waiting',
     },
     orderStatistics: {
       title: 'Order Statistics',
@@ -425,7 +429,7 @@ export const translations = {
       cancelled: 'Cancelled',
       popularItems: 'Popular Items',
       sold: 'sold',
-      noSalesData: 'No sales data available.'
+      noSalesData: 'No sales data available.',
     },
     mealForm: {
       addMeal: 'Add Meal',
@@ -440,7 +444,7 @@ export const translations = {
       cancel: 'Cancel',
       save: 'Save',
       saving: 'Saving...',
-      remove: 'Remove'
+      remove: 'Remove',
     },
     menuForm: {
       createMenu: 'Create New Menu',
@@ -459,7 +463,7 @@ export const translations = {
       cancel: 'Cancel',
       create: 'Create Menu',
       update: 'Update Menu',
-      remove: 'Remove'
+      remove: 'Remove',
     },
     auth: {
       welcomeBack: 'Welcome Back!',
@@ -516,14 +520,14 @@ export const translations = {
       enterEmail: 'Enter email',
       enter6DigitCode: 'Enter 6-digit code',
       failedToSendCode: 'Failed to send code',
-      failedToResetPassword: 'Failed to reset password'
+      failedToResetPassword: 'Failed to reset password',
     },
     status: {
       completed: 'Completed',
       cancelled: 'Cancelled',
       confirmed: 'Confirmed',
-      pending: 'Pending'
-    }
+      pending: 'Pending',
+    },
   },
   uz: {
     common: {
@@ -560,7 +564,7 @@ export const translations = {
       back: 'Orqaga',
       remove: "O'chirish",
       apply: "Qo'llash",
-      reset: 'Qayta tiklash'
+      reset: 'Qayta tiklash',
     },
     menu: {
       title: 'Bugungi menyu',
@@ -571,11 +575,11 @@ export const translations = {
         soup: "Sho'rva/Somsa",
         dessert: 'Desertlar',
         drink: 'Ichimliklar',
-        extra: "Qo'shimcha"
+        extra: "Qo'shimcha",
       },
       soldOut: 'SOTILDI',
       vegetarian: 'Vegan',
-      spicy: 'Achchiq'
+      spicy: 'Achchiq',
     },
     reservations: {
       title: 'Mening buyurtmalarim',
@@ -595,18 +599,20 @@ export const translations = {
       sending: 'Yuborilmoqda...',
       orderHistory: 'Buyurtmalar tarixi',
       order: 'Buyurtma',
-      goToMenu: 'Menyuga o\'tish',
-      noOrders: 'Sizda buyurtmalar yo\'q',
+      goToMenu: "Menyuga o'tish",
+      noOrders: "Sizda buyurtmalar yo'q",
       orderConfirmed: 'Buyurtma tasdiqlandi',
       orderSentForProcessing: 'Buyurtmangiz qayta ishlash uchun yuborildi',
       error: 'Xato',
-      cartEmpty: 'Savat bo\'sh',
-      addItemsToCart: 'Savatga taom qo\'shing',
+      cartEmpty: "Savat bo'sh",
+      addItemsToCart: "Savatga taom qo'shing",
+      adminCannotOrder: 'Administratorlar buyurtma bera olmaydi',
+      adminCannotOrderDesc: 'Administratorlar buyurtma berishga ruxsat etilmagan',
       orderCancelled: 'Buyurtma bekor qilindi',
       orderCancelledSuccess: 'Buyurtmangiz muvaffaqiyatli bekor qilindi',
       cancelConfirmation: 'Buyurtmani bekor qilmoqchimisiz?',
       cancelButton: 'Bekor qilish',
-      sec: 'sek'
+      sec: 'sek',
     },
     filters: {
       title: 'Filtrlar',
@@ -621,7 +627,7 @@ export const translations = {
       allFoods: 'Barcha taomlar',
       dryFood: 'Quruq taom',
       liquidFood: "Suyuq taom (sho'rvalar)",
-      includesDrinks: "Ichimliklar bilan",
+      includesDrinks: 'Ichimliklar bilan',
       priceSorting: 'Narx va saralash',
       allPrices: 'Barcha narxlar',
       budget: 'Arzon ($10 gacha)',
@@ -629,18 +635,18 @@ export const translations = {
       premium: 'Premium ($15+)',
       sortBy: 'Saralash',
       default: 'Standart',
-      priceLowHigh: "Narx: pastdan yuqoriga",
-      priceHighLow: "Narx: yuqoridan pastga",
+      priceLowHigh: 'Narx: pastdan yuqoriga',
+      priceHighLow: 'Narx: yuqoridan pastga',
       highestRated: 'Eng yuqori reyting',
       favoritesOnly: 'Faqat sevimlilar',
       resetFilters: 'Filtrlarni tiklash',
-      foodType: 'Taom turi'
+      foodType: 'Taom turi',
     },
     admin: {
       menus: 'Menyular',
       meals: 'Taomlar',
       orders: 'Buyurtmalar',
-      statistics: 'Statistika'
+      statistics: 'Statistika',
     },
     mealsManager: {
       title: 'Taomlar',
@@ -650,8 +656,8 @@ export const translations = {
       vegetarian: 'Vegetarian',
       spicy: 'Achchiq',
       unavailable: 'Mavjud emas',
-      markAsUnavailable: "Mavjud emas deb belgilash",
-      markAsAvailable: "Mavjud deb belgilash"
+      markAsUnavailable: 'Mavjud emas deb belgilash',
+      markAsAvailable: 'Mavjud deb belgilash',
     },
     menusManager: {
       title: 'Menyular',
@@ -661,7 +667,7 @@ export const translations = {
       active: 'Faol',
       inactive: 'Faol emas',
       includedMeals: 'Kiritilgan taomlar',
-      more: 'yana'
+      more: 'yana',
     },
     ordersManager: {
       title: 'Buyurtmalarni boshqarish',
@@ -677,7 +683,7 @@ export const translations = {
       newOrder: 'yangi buyurtma',
       newOrders: 'yangi buyurtma',
       newOrdersMany: 'yangi buyurtmalar',
-      waiting: 'kutilmoqda'
+      waiting: 'kutilmoqda',
     },
     orderStatistics: {
       title: 'Buyurtmalar statistikasi',
@@ -688,7 +694,7 @@ export const translations = {
       cancelled: 'Bekor qilindi',
       popularItems: 'Mashhur taomlar',
       sold: 'sotildi',
-      noSalesData: "Savdo ma'lumotlari yo'q."
+      noSalesData: "Savdo ma'lumotlari yo'q.",
     },
     mealForm: {
       addMeal: "Taom qo'shish",
@@ -703,7 +709,7 @@ export const translations = {
       cancel: 'Bekor qilish',
       save: 'Saqlash',
       saving: 'Saqlanmoqda...',
-      remove: "O'chirish"
+      remove: "O'chirish",
     },
     menuForm: {
       createMenu: 'Yangi menyu yaratish',
@@ -722,7 +728,7 @@ export const translations = {
       cancel: 'Bekor qilish',
       create: 'Menyu yaratish',
       update: 'Menyuni yangilash',
-      remove: "O'chirish"
+      remove: "O'chirish",
     },
     auth: {
       welcomeBack: 'Qaytganingizdan xursandmiz!',
@@ -737,12 +743,12 @@ export const translations = {
       register: "Ro'yxatdan o'tish",
       processing: 'Ishlanmoqda...',
       noAccount: "Akkauntingiz yo'qmi?",
-      hasAccount: "Akkauntingiz bormi?",
-      termsAgreement: "Davom etish orqali siz quyidagilarga rozilik bildirasiz",
-      termsOfUse: "Foydalanish shartlari",
+      hasAccount: 'Akkauntingiz bormi?',
+      termsAgreement: 'Davom etish orqali siz quyidagilarga rozilik bildirasiz',
+      termsOfUse: 'Foydalanish shartlari',
       slogan: 'Tushlik buyurtma qilish uchun aqlli yordamchi',
       benefit1Title: 'Navbatsiz buyurtma',
-      benefit1Desc: "Vaqtni tejang - oldindan buyurtma qiling",
+      benefit1Desc: 'Vaqtni tejang - oldindan buyurtma qiling',
       benefit2Title: 'Onlayn bron qilish',
       benefit2Desc: 'Bir necha bosish bilan tushlik band qiling',
       benefit3Title: "Qulay to'lov",
@@ -753,17 +759,17 @@ export const translations = {
       loginSuccess: 'Siz muvaffaqiyatli kirdingiz',
       registerSuccess: "Ro'yxatdan o'tish muvaffaqiyatli",
       loginError: 'Kirish xatosi',
-      loginFailed: 'Kirib bo\'lmadi',
+      loginFailed: "Kirib bo'lmadi",
       registerError: "Ro'yxatdan o'tish xatosi",
       registerFailed: "Ro'yxatdan o'tib bo'lmadi",
       error: 'Xato',
       passwordsNotMatch: 'Parollar mos kelmadi',
       forgotPasswordTitle: 'Parolni unutdingizmi?',
-      enterEmailForCode: "Tiklash kodi uchun emailingizni kiriting",
+      enterEmailForCode: 'Tiklash kodi uchun emailingizni kiriting',
       sendCode: 'Kod yuborish',
       sending: 'Yuborilmoqda...',
       enterCode: 'Kodni kiriting',
-      codeSentTo: "6 xonali kodni yubordik",
+      codeSentTo: '6 xonali kodni yubordik',
       verify: 'Tasdiqlash',
       verifying: 'Tekshirilmoqda...',
       resendCode: 'Kodni qayta yuborish',
@@ -774,19 +780,19 @@ export const translations = {
       savingPassword: 'Saqlanmoqda...',
       codeSent: 'Kod yuborildi',
       codeVerified: 'Kod tasdiqlandi',
-      passwordChanged: 'Parol muvaffaqiyatli o\'zgartirildi',
-      invalidCode: 'Noto\'g\'ri kod',
+      passwordChanged: "Parol muvaffaqiyatli o'zgartirildi",
+      invalidCode: "Noto'g'ri kod",
       enterEmail: 'Emailni kiriting',
       enter6DigitCode: '6 xonali kodni kiriting',
-      failedToSendCode: 'Kod yuborib bo\'lmadi',
-      failedToResetPassword: 'Parolni tiklab bo\'lmadi'
+      failedToSendCode: "Kod yuborib bo'lmadi",
+      failedToResetPassword: "Parolni tiklab bo'lmadi",
     },
     status: {
       completed: 'Bajarildi',
       cancelled: 'Bekor qilindi',
       confirmed: 'Tasdiqlandi',
-      pending: 'Kutilmoqda'
-    }
+      pending: 'Kutilmoqda',
+    },
   },
   ja: {
     common: {
@@ -823,7 +829,7 @@ export const translations = {
       back: '戻る',
       remove: '削除',
       apply: '適用',
-      reset: 'リセット'
+      reset: 'リセット',
     },
     menu: {
       title: '本日のメニュー',
@@ -834,11 +840,11 @@ export const translations = {
         soup: 'スープ/サムサ',
         dessert: 'デザート',
         drink: 'ドリンク',
-        extra: 'その他'
+        extra: 'その他',
       },
       soldOut: '売り切れ',
       vegetarian: 'ベジ',
-      spicy: '辛い'
+      spicy: '辛い',
     },
     reservations: {
       title: '注文履歴',
@@ -865,11 +871,13 @@ export const translations = {
       error: 'エラー',
       cartEmpty: 'カートが空です',
       addItemsToCart: 'カートに商品を追加してください',
+      adminCannotOrder: '管理者は注文できません',
+      adminCannotOrderDesc: '管理者は注文を行うことができません',
       orderCancelled: '注文キャンセル',
       orderCancelledSuccess: '注文が正常にキャンセルされました',
       cancelConfirmation: '注文をキャンセルしますか？',
       cancelButton: 'キャンセル',
-      sec: '秒'
+      sec: '秒',
     },
     filters: {
       title: 'フィルター',
@@ -897,13 +905,13 @@ export const translations = {
       highestRated: '評価順',
       favoritesOnly: 'お気に入りのみ',
       resetFilters: 'フィルターをリセット',
-      foodType: '食品タイプ'
+      foodType: '食品タイプ',
     },
     admin: {
       menus: 'メニュー',
       meals: '料理',
       orders: '注文',
-      statistics: '統計'
+      statistics: '統計',
     },
     mealsManager: {
       title: '料理',
@@ -914,7 +922,7 @@ export const translations = {
       spicy: '辛い',
       unavailable: '利用不可',
       markAsUnavailable: '利用不可としてマーク',
-      markAsAvailable: '利用可能としてマーク'
+      markAsAvailable: '利用可能としてマーク',
     },
     menusManager: {
       title: 'メニュー',
@@ -924,7 +932,7 @@ export const translations = {
       active: 'アクティブ',
       inactive: '非アクティブ',
       includedMeals: '含まれる料理',
-      more: '他'
+      more: '他',
     },
     ordersManager: {
       title: '注文管理',
@@ -940,7 +948,7 @@ export const translations = {
       newOrder: '新規注文',
       newOrders: '新規注文',
       newOrdersMany: '新規注文',
-      waiting: '待機中'
+      waiting: '待機中',
     },
     orderStatistics: {
       title: '注文統計',
@@ -951,7 +959,7 @@ export const translations = {
       cancelled: 'キャンセル',
       popularItems: '人気商品',
       sold: '販売済み',
-      noSalesData: '販売データがありません。'
+      noSalesData: '販売データがありません。',
     },
     mealForm: {
       addMeal: '料理を追加',
@@ -966,7 +974,7 @@ export const translations = {
       cancel: 'キャンセル',
       save: '保存',
       saving: '保存中...',
-      remove: '削除'
+      remove: '削除',
     },
     menuForm: {
       createMenu: '新しいメニューを作成',
@@ -985,7 +993,7 @@ export const translations = {
       cancel: 'キャンセル',
       create: 'メニューを作成',
       update: 'メニューを更新',
-      remove: '削除'
+      remove: '削除',
     },
     auth: {
       welcomeBack: 'お帰りなさい！',
@@ -1042,13 +1050,13 @@ export const translations = {
       enterEmail: 'メールアドレスを入力',
       enter6DigitCode: '6桁のコードを入力',
       failedToSendCode: 'コードの送信に失敗しました',
-      failedToResetPassword: 'パスワードのリセットに失敗しました'
+      failedToResetPassword: 'パスワードのリセットに失敗しました',
     },
     status: {
       completed: '完了',
       cancelled: 'キャンセル済み',
       confirmed: '確認済み',
-      pending: '保留中'
-    }
-  }
-};
+      pending: '保留中',
+    },
+  },
+}

@@ -25,7 +25,7 @@ export default function AppRoutes({ searchQuery, setSearchQuery }) {
       <Route
         path="/admin"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute adminOnly>
             <MainLayout searchQuery={searchQuery} setSearchQuery={setSearchQuery}>
               <AdminPage />
             </MainLayout>
@@ -35,7 +35,7 @@ export default function AppRoutes({ searchQuery, setSearchQuery }) {
       <Route
         path="/reservations"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute userOnly>
             <MainLayout searchQuery={searchQuery} setSearchQuery={setSearchQuery}>
               <ReservationsPage />
             </MainLayout>

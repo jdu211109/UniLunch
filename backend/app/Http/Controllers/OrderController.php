@@ -79,6 +79,14 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+        // Prevent admins from creating orders
+        if (Auth::user()->role === 'admin') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Administrators cannot place orders',
+            ], 403);
+        }
+
         $validated = $request->validate([
             'items' => 'required|array|min:1',
             'items.*.mealId' => 'required|exists:meals,id',

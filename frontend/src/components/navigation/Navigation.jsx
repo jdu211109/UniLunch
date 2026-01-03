@@ -166,17 +166,19 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => { 
 
               {/* Navigation buttons */}
               <div className="flex items-center gap-1">
-                <Button asChild variant="ghost" className="h-9 px-4 rounded-full hover:bg-accent transition-all duration-200">
-                  <Link to="/reservations" className="flex items-center gap-2">
-                    <Calendar size={16} />
-                    <span className="hidden lg:inline">{t('common.orders')}</span>
-                    {cartItemsCount > 0 && (
-                      <Badge variant="secondary" className="ml-1 h-5 min-w-5 text-xs !bg-orange-600 dark:!bg-orange-500 !text-white hover:!bg-orange-700 dark:hover:!bg-orange-600">
-                        {cartItemsCount}
-                      </Badge>
-                    )}
-                  </Link>
-                </Button>
+                {!user?.isAdmin && (
+                  <Button asChild variant="ghost" className="h-9 px-4 rounded-full hover:bg-accent transition-all duration-200">
+                    <Link to="/reservations" className="flex items-center gap-2">
+                      <Calendar size={16} />
+                      <span className="hidden lg:inline">{t('common.orders')}</span>
+                      {cartItemsCount > 0 && (
+                        <Badge variant="secondary" className="ml-1 h-5 min-w-5 text-xs !bg-orange-600 dark:!bg-orange-500 !text-white hover:!bg-orange-700 dark:hover:!bg-orange-600">
+                          {cartItemsCount}
+                        </Badge>
+                      )}
+                    </Link>
+                  </Button>
+                )}
 
                 {user?.isAdmin && (
                   <Button asChild variant="ghost" className="h-9 px-4 rounded-full hover:bg-accent transition-all duration-200">
@@ -278,17 +280,19 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => { 
 
               {/* Mobile navigation links */}
               <div className="space-y-2">
-                <Button asChild variant="ghost" className="w-full justify-start h-12 rounded-xl hover:bg-accent/80 transition-all duration-200" onClick={() => setIsOpen(false)}>
-                  <Link to="/reservations" className="flex items-center gap-3">
-                    <Calendar size={18} />
-                    <span className="font-medium">{t('common.orders')}</span>
-                    {cartItemsCount > 0 && (
-                      <Badge variant="secondary" className="ml-auto h-6 min-w-6 !bg-orange-600 dark:!bg-orange-500 !text-white hover:!bg-orange-700 dark:hover:!bg-orange-600">
-                        {cartItemsCount}
-                      </Badge>
-                    )}
-                  </Link>
-                </Button>
+                {!user?.isAdmin && (
+                  <Button asChild variant="ghost" className="w-full justify-start h-12 rounded-xl hover:bg-accent/80 transition-all duration-200" onClick={() => setIsOpen(false)}>
+                    <Link to="/reservations" className="flex items-center gap-3">
+                      <Calendar size={18} />
+                      <span className="font-medium">{t('common.orders')}</span>
+                      {cartItemsCount > 0 && (
+                        <Badge variant="secondary" className="ml-auto h-6 min-w-6 !bg-orange-600 dark:!bg-orange-500 !text-white hover:!bg-orange-700 dark:hover:!bg-orange-600">
+                          {cartItemsCount}
+                        </Badge>
+                      )}
+                    </Link>
+                  </Button>
+                )}
 
                 {user?.isAdmin && (
                   <Button asChild variant="ghost" className="w-full justify-start h-12 rounded-xl hover:bg-accent/80 transition-all duration-200" onClick={() => setIsOpen(false)}>
