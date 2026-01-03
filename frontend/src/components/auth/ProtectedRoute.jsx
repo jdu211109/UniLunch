@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../../utils/apiClient";
 import { useAuth } from "../../hooks/useAuth.jsx";
 
-export default function ProtectedRoute({ children, adminOnly = false }) {
+export default function ProtectedRoute({ children, adminOnly = false, userOnly = false }) {
   const auth = useAuth();
   const location = useLocation();
 
@@ -35,6 +35,11 @@ export default function ProtectedRoute({ children, adminOnly = false }) {
 
   if (adminOnly && !user?.isAdmin) {
     return <Navigate to="/menu" state={{ from: location }} replace />;
+  }
+
+  // Redirect admins away from user-only pages (like reservations)
+  if (userOnly && user?.isAdmin) {
+    return <Navigate to="/admin" state={{ from: location }} replace />;
   }
 
   return children;

@@ -7,12 +7,15 @@ import { Trash2, Plus, Minus, CreditCard, Banknote, Clock, X } from "lucide-reac
 import { Button, Card, Badge } from "../components/ui";
 import { useToast } from "../components/navigation/useToast.jsx";
 import { useLanguage } from "../hooks/useLanguage";
+import { useAuth } from "../hooks/useAuth";
 
 export default function ReservationsPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const { t, language } = useLanguage();
+  const { user } = useAuth();
+  const isAdmin = user?.isAdmin;
 
   const [cart, setCart] = useState([]);
   const [, forceUpdate] = useState(0); // For re-rendering cancel timer
@@ -97,6 +100,16 @@ export default function ReservationsPage() {
   };
 
   const handleConfirmOrder = () => {
+    // Prevent admins from placing orders
+    if (isAdmin) {
+      toast({
+        title: t('reservations.adminCannotOrder'),
+        description: t('reservations.adminCannotOrderDesc'),
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (cart.length === 0) {
       toast({
         title: t('reservations.cartEmpty'),
