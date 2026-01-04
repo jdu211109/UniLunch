@@ -40,6 +40,33 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => { 
     return 'light';
   });
 
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isOpen) {
+      // Save current scroll position
+      const scrollY = window.scrollY;
+      // Lock scroll
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+    } else {
+      // Restore scroll position
+      const scrollY = document.body.style.top;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      }
+    }
+    
+    return () => {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+    };
+  }, [isOpen]);
+
   const { language, setLanguage, t } = useLanguage();
   const auth = useAuth();
   const navigate = useNavigate();
@@ -244,7 +271,7 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => { 
         {/* Mobile navigation */}
         <div
           className={`${isOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
-            } md:hidden fixed top-16 right-0 w-80 max-w-[90vw] h-[calc(100vh-4rem)] bg-background/95 backdrop-blur border-l border-border/50 shadow-xl transition-all duration-300 ease-in-out overflow-y-auto`}
+            } md:hidden fixed top-16 right-0 w-80 max-w-[90vw] h-[calc(100vh-4rem)] bg-background/95 backdrop-blur border-l border-border/50 shadow-xl transition-all duration-300 ease-in-out overflow-y-auto z-[60]`}
         >
           {auth.status === "authenticated" && (
             <div className="p-6 space-y-6">
@@ -366,7 +393,7 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => { 
         {/* Mobile overlay */}
         {isOpen && (
           <div
-            className="md:hidden fixed inset-0 top-16 bg-black/20 backdrop-blur-sm transition-opacity duration-300"
+            className="md:hidden fixed inset-0 top-16 bg-black/20 backdrop-blur-sm transition-opacity duration-300 z-[55]"
             onClick={() => setIsOpen(false)}
           />
         )}

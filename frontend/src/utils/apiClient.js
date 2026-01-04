@@ -1,5 +1,5 @@
 // src/utils/apiClient.js
-const BASE_URL = 'http://127.0.0.1:8001/api'
+const BASE_URL = `http://${window.location.hostname}:8001/api`
 
 // Helper function to get auth token
 const getAuthToken = () => {
