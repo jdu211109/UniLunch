@@ -167,7 +167,7 @@ export default function MenuPage({ searchQuery = '' }) {
   return (
     <div className="container mx-auto py-6 px-4 relative">
       {/* Right Rail Navigation */}
-      <div className="fixed right-2 sm:right-4 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3 p-2 bg-background/80 backdrop-blur-md rounded-full shadow-lg border border-border/50">
+      <div className="fixed right-2 sm:right-4 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-3 p-2 bg-background/80 backdrop-blur-md rounded-full shadow-lg border border-border/50">
         {categories.map((category) => {
           const count = meals.filter((m) => m.category === category.key).length
           if (count === 0) return null
