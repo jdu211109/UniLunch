@@ -59,13 +59,16 @@ export default function Navigation({ searchQuery = "", setSearchQuery = () => { 
         window.scrollTo(0, parseInt(scrollY || '0') * -1);
       }
     }
-    
+  }, [isOpen]);
+
+  // Cleanup body styles on component unmount
+  useEffect(() => {
     return () => {
       document.body.style.position = '';
       document.body.style.top = '';
       document.body.style.width = '';
     };
-  }, [isOpen]);
+  }, []);
 
   const { language, setLanguage, t } = useLanguage();
   const auth = useAuth();
